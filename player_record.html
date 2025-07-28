@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선수 개인 기록 - 중고등학교 배구 연맹</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-volleyball-ball"></i>
+                <span>배구 연맹 데이터</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">홈</a>
+                <a href="player_record.html" class="nav-link active">선수 기록</a>
+                <a href="#" class="nav-link">팀 순위</a>
+                <a href="#" class="nav-link">통계</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <h1><i class="fas fa-user-friends"></i> 선수 개인 기록</h1>
+            <p>전국 중고등학교 배구 선수들의 상세 기록을 확인하세요</p>
+        </div>
+
+        <!-- 검색 및 필터 -->
+        <div class="search-section">
+            <div class="search-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="playerSearch" placeholder="선수 이름으로 검색...">
+                </div>
+                <div class="filter-group">
+                    <select id="schoolFilter">
+                        <option value="">모든 학교</option>
+                        <option value="high">고등학교</option>
+                        <option value="middle">중학교</option>
+                    </select>
+                    <select id="positionFilter">
+                        <option value="">모든 포지션</option>
+                        <option value="setter">세터</option>
+                        <option value="outside">아웃사이드 히터</option>
+                        <option value="middle">미들 블로커</option>
+                        <option value="opposite">오포지트</option>
+                        <option value="libero">리베로</option>
+                    </select>
+                    <button class="btn btn-outline" onclick="resetFilters()">
+                        <i class="fas fa-undo"></i> 초기화
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 통계 요약 -->
+        <div class="stats-summary">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="totalPlayers">2,847</div>
+                    <div class="stat-label">총 선수 수</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="filteredPlayers">2,847</div>
+                    <div class="stat-label">검색 결과</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">MVP 선수</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 선수 기록 테이블 -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>선수 기록</h2>
+                <div class="table-actions">
+                    <button class="btn btn-outline" onclick="exportData()">
+                        <i class="fas fa-download"></i> 엑셀 다운로드
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="players-table" id="playersTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">
+                                순위 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(1)">
+                                이름 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(2)">
+                                학교 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(3)">
+                                포지션 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(4)">
+                                경기 수 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(5)">
+                                득점 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(6)">
+                                어택 성공률 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(7)">
+                                블록 <i class="fas fa-sort"></i>
+                            </th>
+                            <th onclick="sortTable(8)">
+                                서브 에이스 <i class="fas fa-sort"></i>
+                            </th>
+                            <th>상세</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playersTableBody">
+                        <!-- 데이터는 JavaScript로 동적 생성 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination">
+            <button class="page-btn" onclick="changePage(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="page-numbers" id="pageNumbers">
+                <!-- 페이지 번호는 JavaScript로 동적 생성 -->
+            </div>
+            <button class="page-btn" onclick="changePage(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 선수 상세 모달 -->
+    <div id="playerModal" class="modal">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <div class="player-detail">
+                <div class="player-header">
+                    <div class="player-photo">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="player-info">
+                        <h2 id="modalPlayerName">김철수</h2>
+                        <p id="modalPlayerSchool">서울고등학교</p>
+                        <p id="modalPlayerPosition">아웃사이드 히터</p>
+                    </div>
+                </div>
+                
+                <div class="player-stats">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-title">총 경기 수</div>
+                            <div class="stat-value" id="modalGames">24</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-title">총 득점</div>
+                            <div class="stat-value" id="modalPoints">342</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-title">어택 성공률</div>
+                            <div class="stat-value" id="modalAttackRate">68.5%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-title">블록 포인트</div>
+                            <div class="stat-value" id="modalBlocks">45</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-title">서브 에이스</div>
+                            <div class="stat-value" id="modalAces">28</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-title">리시브 성공률</div>
+                            <div class="stat-value" id="modalReceiveRate">82.3%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-games">
+                    <h3>최근 경기 기록</h3>
+                    <div class="games-list" id="recentGames">
+                        <!-- 최근 경기 기록 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ffd700;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #ffd700;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 컨테이너 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* 페이지 헤더 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header h1 i {
+            color: #667eea;
+            margin-right: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* 검색 섹션 */
+        .search-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-group select {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* 통계 요약 */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 테이블 컨테이너 */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .players-table th {
+            background: #f8f9fa;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: background-color 0.3s;
+        }
+
+        .players-table th:hover {
+            background: #e9ecef;
+        }
+
+        .players-table th i {
+            margin-left: 0.5rem;
+            color: #999;
+        }
+
+        .players-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            white-space: nowrap;
+        }
+
+        .players-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .position {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .position.setter { background: #e3f2fd; color: #1976d2; }
+        .position.outside { background: #f3e5f5; color: #7b1fa2; }
+        .position.middle { background: #e8f5e8; color: #388e3c; }
+        .position.opposite { background: #fff3e0; color: #f57c00; }
+        .position.libero { background: #ffebee; color: #d32f2f; }
+
+        .view-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background-color 0.3s;
+        }
+
+        .view-btn:hover {
+            background: #5a67d8;
+        }
+
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-btn {
+            background: white;
+            border: 2px solid #e9ecef;
+            color: #667eea;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .page-number {
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #e9ecef;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .page-number.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .page-number:hover:not(.active) {
+            background: #f8f9fa;
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 1rem;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .player-detail {
+            padding: 2rem;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .player-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-photo i {
+            font-size: 4rem;
+            color: white;
+        }
+
+        .player-info h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-info p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-title {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .recent-games h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .games-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* 반응형 디자인 */
+        @media screen and (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                min-width: auto;
+            }
+
+            .filter-group {
+                justify-content: center;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .player-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // 샘플 데이터
+        const playersData = [
+            {name: "김철수", school: "서울고등학교", schoolType: "high", position: "outside", games: 24, points: 342, attackRate: 68.5, blocks: 45, aces: 28},
+            {name: "이영희", school: "부산여고", schoolType: "high", position: "setter", games: 22, points: 156, attackRate: 45.2, blocks: 23, aces: 34},
+            {name: "박민수", school: "대구중학교", schoolType: "middle", position: "middle", games: 26, points: 289, attackRate: 72.1, blocks: 67, aces: 19},
+            {name: "정하나", school: "광주여중", schoolType: "middle", position: "libero", games: 25, points: 98, attackRate: 35.8, blocks: 12, aces: 15},
+            {name: "최대성", school: "인천고등학교", schoolType: "high", position: "opposite", games: 23, points: 398, attackRate: 75.3, blocks: 38, aces: 41},
+            {name: "송미래", school: "울산여고", schoolType: "high", position: "outside", games: 21, points: 267, attackRate: 63.7, blocks: 29, aces: 22},
+            {name: "윤태진", school: "대전중학교", schoolType: "middle", position: "setter", games: 24, points: 134, attackRate: 42.1, blocks: 18, aces: 29},
+            {name: "한수정", school: "경기여고", schoolType: "high", position: "middle", games: 25, points: 312, attackRate: 69.8, blocks: 58, aces: 16},
+            {name: "남준호", school: "강원고등학교", schoolType: "high", position: "opposite", games: 22, points: 356, attackRate: 71.4, blocks: 42, aces: 37},
+            {name: "배서연", school: "충남여중", schoolType: "middle", position: "libero", games: 26, points: 87, attackRate: 38.9, blocks: 8, aces: 12},
+            {name: "조현우", school: "전북고등학교", schoolType: "high", position: "outside", games: 24, points: 298, attackRate: 65.2, blocks: 33, aces: 25},
+            {name: "김나연", school: "경남여고", schoolType: "high", position: "setter", games: 23, points: 142, attackRate: 44.6, blocks: 21, aces: 31},
+            {name: "이준서", school: "제주중학교", schoolType: "middle", position: "middle", games: 20, points: 245, attackRate: 67.3, blocks: 49, aces: 14},
+            {name: "박소영", school: "충북여중", schoolType: "middle", position: "outside", games: 25, points: 276, attackRate: 61.8, blocks: 27, aces: 20},
+            {name: "정민기", school: "경북고등학교", schoolType: "high", position: "opposite", games: 24, points: 367, attackRate: 73.2, blocks: 41, aces: 39}
+        ];
+
+        let filteredData = [...playersData];
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let currentSort = {column: -1, direction: "asc"};
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable();
+            renderPagination();
+            setupEventListeners();
+        });
+
+        // 이벤트 리스너 설정
+        function setupEventListeners() {
+            document.getElementById('playerSearch').addEventListener('input', filterPlayers);
+            document.getElementById('schoolFilter').addEventListener('change', filterPlayers);
+            document.getElementById('positionFilter').addEventListener('change', filterPlayers);
+            
+            // 모달 닫기
+            document.querySelector('.close').onclick = function() {
+                document.getElementById('playerModal').style.display = 'none';
+            }
+            
+            window.onclick = function(event) {
+                const modal = document.getElementById('playerModal');
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        // 테이블 렌더링
+        function renderTable() {
+            const tbody = document.getElementById('playersTableBody');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = filteredData.slice(start, end);
+
+            tbody.innerHTML = pageData.map((player, index) => `
+                <tr>
+                    <td class="rank">${start + index + 1}</td>
+                    <td class="player-name">${player.name}</td>
+                    <td>${player.school}</td>
+                    <td><span class="position ${player.position}">${getPositionName(player.position)}</span></td>
+                    <td>${player.games}</td>
+                    <td>${player.points}</td>
+                    <td>${player.attackRate}%</td>
+                    <td>${player.blocks}</td>
+                    <td>${player.aces}</td>
+                    <td><button class="view-btn" onclick="showPlayerDetail(${start + index})">상세보기</button></td>
+                </tr>
+            `).join('');
+
+            // 통계 업데이트
+            document.getElementById('filteredPlayers').textContent = filteredData.length.toLocaleString();
+        }
+
+        // 포지션 이름 변환
+        function getPositionName(position) {
+            const positions = {
+                setter: "세터",
+                outside: "아웃사이드",
+                middle: "미들",
+                opposite: "오포지트",
+                libero: "리베로"
+            };
+            return positions[position] || position;
+        }
+
+        // 선수 필터링
+        function filterPlayers() {
+            const searchTerm = document.getElementById('playerSearch').value.toLowerCase();
+            const schoolFilter = document.getElementById('schoolFilter').value;
+            const positionFilter = document.getElementById('positionFilter').value;
+
+            filteredData = playersData.filter(player => {
+                const matchesSearch = player.name.toLowerCase().includes(searchTerm);
+                const matchesSchool = !schoolFilter || player.schoolType === schoolFilter;
+                const matchesPosition = !positionFilter || player.position === positionFilter;

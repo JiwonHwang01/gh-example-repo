@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중고등학교 배구 연맹 데이터 - 홈</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-volleyball-ball"></i>
+                <span>배구 연맹 데이터</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">홈</a>
+                <a href="player_record.html" class="nav-link">선수 기록</a>
+                <a href="#" class="nav-link">팀 순위</a>
+                <a href="#" class="nav-link">통계</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="home-container">
+        <!-- 히어로 섹션 -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>중고등학교 배구 연맹</h1>
+                <p>전국 중고등학교 배구 선수들의 기록과 팀 순위를 한눈에</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">선수 기록 보기</a>
+                    <a href="#" class="btn btn-secondary">팀 순위 보기</a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">등록 팀</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2,847</div>
+                    <div class="stat-label">등록 선수</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">45</div>
+                    <div class="stat-label">진행 중인 대회</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 기능 섹션 -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <h3>선수 개인 기록</h3>
+                <p>각 선수의 상세한 경기 기록과 통계를 확인하고 이름으로 검색할 수 있습니다</p>
+                <div class="feature-actions">
+                    <a href="#" class="btn btn-outline">기록 보기</a>
+                    <a href="#" class="btn btn-text">검색하기</a>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>팀 순위</h3>
+                <p>실시간 팀 순위와 승률, 경기 결과를 확인할 수 있습니다</p>
+                <div class="feature-actions">
+                    <a href="#" class="btn btn-outline">순위 보기</a>
+                    <a href="#" class="btn btn-text">경기 일정</a>
+                </div>
+            </div>
+
+            <div class="feature-card admin-only" style="display: none;">
+                <div class="feature-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3>관리자 기능</h3>
+                <p>선수 정보 관리, 경기 결과 입력, 통계 관리 등 관리자 전용 기능</p>
+                <div class="feature-actions">
+                    <a href="#" class="btn btn-admin">관리자 페이지</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 최근 경기 결과 -->
+        <section class="recent-matches">
+            <h2>최근 경기 결과</h2>
+            <div class="matches-grid">
+                <div class="match-card">
+                    <div class="match-date">2024.03.15</div>
+                    <div class="match-teams">
+                        <div class="team home">
+                            <span class="team-name">서울고등학교</span>
+                            <span class="team-score">3</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team away">
+                            <span class="team-score">1</span>
+                            <span class="team-name">경기고등학교</span>
+                        </div>
+                    </div>
+                    <div class="match-status completed">경기 종료</div>
+                </div>
+
+                <div class="match-card">
+                    <div class="match-date">2024.03.14</div>
+                    <div class="match-teams">
+                        <div class="team home">
+                            <span class="team-name">부산중학교</span>
+                            <span class="team-score">2</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team away">
+                            <span class="team-score">3</span>
+                            <span class="team-name">대구중학교</span>
+                        </div>
+                    </div>
+                    <div class="match-status completed">경기 종료</div>
+                </div>
+
+                <div class="match-card">
+                    <div class="match-date">2024.03.16</div>
+                    <div class="match-teams">
+                        <div class="team home">
+                            <span class="team-name">광주고등학교</span>
+                            <span class="team-score">-</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team away">
+                            <span class="team-score">-</span>
+                            <span class="team-name">대전고등학교</span>
+                        </div>
+                    </div>
+                    <div class="match-status upcoming">예정</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 퀵 액세스 -->
+        <section class="quick-access">
+            <h2>빠른 접근</h2>
+            <div class="quick-buttons">
+                <a href="#" class="quick-btn">
+                    <i class="fas fa-search"></i>
+                    <span>선수 검색</span>
+                </a>
+                <a href="#" class="quick-btn">
+                    <i class="fas fa-list-ol"></i>
+                    <span>팀 순위</span>
+                </a>
+                <a href="#" class="quick-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>통계 보기</span>
+                </a>
+                <a href="#" class="quick-btn">
+                    <i class="fas fa-calendar"></i>
+                    <span>경기 일정</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 로그인 모달 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>관리자 로그인</h2>
+            <form>
+                <div class="form-group">
+                    <label for="username">사용자명</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">로그인</button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ffd700;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ffd700;
+        }
+
+        /* 컨테이너 */
+        .home-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            margin: 0 -1rem 3rem -1rem;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* 기능 섹션 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .feature-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* 최근 경기 결과 */
+        .recent-matches {
+            margin-bottom: 3rem;
+        }
+
+        .recent-matches h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .match-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .match-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .match-date {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .team-score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .vs {
+            font-weight: bold;
+            color: #999;
+        }
+
+        .match-status {
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .match-status.completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .match-status.upcoming {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        /* 퀵 액세스 */
+        .quick-access {
+            margin-bottom: 3rem;
+        }
+
+        .quick-access h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .quick-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-btn {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            color: #667eea;
+        }
+
+        .quick-btn i {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-text {
+            background: transparent;
+            color: #667eea;
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-text:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* 반응형 디자인 */
+        @media screen and (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                gap: 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .quick-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // 관리자 기능 표시/숨김 (실제 환경에서는 서버에서 처리)
+        let isAdmin = false; // 실제로는 로그인 상태에 따라 결정
+
+        function toggleAdminFeatures() {
+            const adminCard = document.querySelector('.admin-only');
+            if (isAdmin) {
+                adminCard.style.display = 'block';
+            } else {
+                adminCard.style.display = 'none';
+            }
+        }
+
+        // 관리자 로그인 시뮬레이션
+        function simulateAdminLogin() {
+            isAdmin = true;
+            toggleAdminFeatures();
+            
+            // 헤더에 관리자 표시 추가
+            const nav = document.querySelector('.nav');
+            const adminIndicator = document.createElement('span');
+            adminIndicator.innerHTML = '<i class="fas fa-user-shield"></i> 관리자';
+            adminIndicator.style.color = '#ffd700';
+            adminIndicator.style.marginLeft = '1rem';
+            nav.appendChild(adminIndicator);
+        }
+
+        // 모달 기능
+        const modal = document.getElementById('loginModal');
+        const closeBtn = document.querySelector('.close');
+
+        // 관리자 로그인 버튼 클릭 시 (데모용)
+        document.addEventListener('click', function(e) {
+            if (e.target.textContent === '관리자 로그인') {
+                modal.style.display = 'block';
+            }
+        });
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 로그인 폼 처리 (데모용)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'admin' && password === 'admin') {
+                modal.style.display = 'none';
+                simulateAdminLogin();
+                alert('관리자로 로그인되었습니다!');
+            } else {
+                alert('잘못된 로그인 정보입니다.');
+            }
+        });
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleAdminFeatures();
+        });
+    </script>
+</body>
+</html>
