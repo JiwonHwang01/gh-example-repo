@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUSF - 한국대학스포츠연맹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        /* 헤더 */
+        .header {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 15px 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+        
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-menu a:hover {
+            opacity: 0.8;
+        }
+        
+        /* 메인 배너 */
+        .main-banner {
+            background: linear-gradient(135deg, #ff9eb5 0%, #ffc0cb 100%);
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .banner-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .banner-text {
+            flex: 1;
+            max-width: 600px;
+        }
+        
+        .banner-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #1e3a5f;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+        
+        .banner-btn {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .banner-btn:hover {
+            background-color: #2d5a8f;
+            transform: translateY(-2px);
+        }
+        
+        .banner-illustration {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .sports-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            font-size: 60px;
+        }
+        
+        .runner-icon {
+            background: #4CAF50;
+            color: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 2s infinite;
+        }
+        
+        .tennis-icon {
+            background: #2196F3;
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 꽃잎 장식 */
+        .flower {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+        
+        .flower::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: #1e3a5f;
+            border-radius: 50%;
+        }
+        
+        .flower:nth-child(1) { top: 20%; left: 10%; }
+        .flower:nth-child(2) { top: 30%; right: 15%; }
+        .flower:nth-child(3) { bottom: 25%; left: 20%; }
+        .flower:nth-child(4) { bottom: 15%; right: 25%; }
+        
+        /* 콘텐츠 섹션 */
+        .content-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            color: #1e3a5f;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            color: #1e3a5f;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 푸터 */
+        .footer {
+            background-color: #1e3a5f;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .banner-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .banner-title {
+                font-size: 36px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .sports-icons {
+                margin-top: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">KUSF</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#leagues">KUSF 대학스포츠 U-리그</a></li>
+                    <li><a href="schedule.html">경기일정</a></li>
+                    <li><a href="#news">NEWS</a></li>
+                    <li><a href="#support">주요사업</a></li>
+                    <li><a href="#association">한국대학스포츠협의회</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 메인 배너 -->
+    <section class="main-banner">
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        
+        <div class="banner-content">
+            <div class="banner-text">
+                <h1 class="banner-title">2025 대학운동부<br>평가 및 지원 사업</h1>
+                <button class="banner-btn">최종 선정 결과 바로가기 &raquo;</button>
+            </div>
+            
+            <div class="banner-illustration">
+                <div class="sports-icons">
+                    <div class="tennis-icon">🎾</div>
+                    <div class="runner-icon">🏃‍♂️</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 콘텐츠 섹션 -->
+    <section class="content-section">
+        <h2 class="section-title">KUSF 주요 사업</h2>
+        
+        <div class="cards-container">
+            <div class="card">
+                <h3>대학스포츠 U-리그</h3>
+                <p>전국 대학교가 참여하는 정규 리그 시스템으로 체계적이고 지속적인 대학스포츠 발전을 도모합니다.</p>
+            </div>
+            
+            <div class="card">
+                <h3>클럽챔피언십</h3>
+                <p>동아리 및 클럽팀을 대상으로 한 대회를 통해 더 많은 학생들의 스포츠 참여 기회를 제공합니다.</p>
+            </div>
+            
+            <div class="card">
+                <h3>운동부 지원 사업</h3>
+                <p>대학 운동부의 체계적 운영과 학생선수들의 학습권 보장을 위한 다양한 지원 프로그램을 운영합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>&copy; 2025 한국대학스포츠연맹(KUSF). All rights reserved.</p>
+        <p>Korea University Sports Federation</p>
+    </footer>
+</body>
+</html>
