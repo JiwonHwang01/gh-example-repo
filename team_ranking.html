@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팀 순위 - 중고등학교 배구 연맹</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        .header {
+            background-color: #667eea;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ffd700;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #ffd700;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header h1 i {
+            color: #667eea;
+            margin-right: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Table Container */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .ranking-table th {
+            background: #f8f9fa;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .ranking-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            white-space: nowrap;
+        }
+
+        .ranking-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .rank {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #667eea;
+            text-align: center;
+        }
+
+        .team-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        @media screen and (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                gap: 1rem;
+            }
+            
+            .hide-on-mobile {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-volleyball-ball"></i>
+                <span>배구 연맹 데이터</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">홈</a>
+                <a href="team_ranking.html" class="nav-link active">팀 순위</a>
+                <a href="player_record.html" class="nav-link">선수 기록</a>
+                <a href="player_certification.html" class="nav-link hide-on-mobile">기록 증명서</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-trophy"></i> 팀 순위</h1>
+            <p>학교별 팀 순위와 주요 통계를 확인하세요</p>
+        </div>
+
+        <!-- Team Ranking Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>팀 순위</h2>
+            </div>
+            <div class="table-wrapper">
+                <table class="ranking-table" id="teamRankingTable">
+                    <thead>
+                        <tr>
+                            <th>순위</th>
+                            <th>학교</th>
+                            <th>선수 수</th>
+                            <th>평균 득점</th>
+                            <th>평균 어택 성공률</th>
+                            <th>총 블록</th>
+                            <th>총 서브에이스</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamRankingBody">
+                        <!-- Data will be dynamically generated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const playersData = [
+            {name: "김철수", school: "서울고등학교", schoolType: "high", position: "outside", games: 24, points: 342, attackRate: 68.5, blocks: 45, aces: 28, receiveRate: 82.3},
+            {name: "이영희", school: "부산여고", schoolType: "high", position: "setter", games: 22, points: 156, attackRate: 45.2, blocks: 23, aces: 34, receiveRate: 78.1},
+            {name: "박민수", school: "대구중학교", schoolType: "middle", position: "middle", games: 26, points: 289, attackRate: 72.1, blocks: 67, aces: 19, receiveRate: 65.4},
+            {name: "정하나", school: "광주여중", schoolType: "middle", position: "libero", games: 25, points: 98, attackRate: 35.8, blocks: 12, aces: 15, receiveRate: 91.2},
+            {name: "최대성", school: "인천고등학교", schoolType: "high", position: "opposite", games: 23, points: 398, attackRate: 75.3, blocks: 38, aces: 41, receiveRate: 55.8},
+            {name: "송미래", school: "울산여고", schoolType: "high", position: "outside", games: 21, points: 267, attackRate: 63.7, blocks: 29, aces: 22, receiveRate: 85.1},
+            {name: "윤태진", school: "대전중학교", schoolType: "middle", position: "setter", games: 24, points: 134, attackRate: 42.1, blocks: 18, aces: 29, receiveRate: 72.9},
+            {name: "한수정", school: "경기여고", schoolType: "high", position: "middle", games: 25, points: 312, attackRate: 69.8, blocks: 58, aces: 16, receiveRate: 68.7},
+            {name: "남준호", school: "강원고등학교", schoolType: "high", position: "opposite", games: 22, points: 356, attackRate: 71.4, blocks: 42, aces: 37, receiveRate: 59.3},
+            {name: "배서연", school: "충남여중", schoolType: "middle", position: "libero", games: 26, points: 87, attackRate: 38.9, blocks: 8, aces: 12, receiveRate: 93.5},
+            {name: "조현우", school: "전북고등학교", schoolType: "high", position: "outside", games: 24, points: 298, attackRate: 65.2, blocks: 33, aces: 25, receiveRate: 83.6},
+            {name: "김나연", school: "경남여고", schoolType: "high", position: "setter", games: 23, points: 142, attackRate: 44.6, blocks: 21, aces: 31, receiveRate: 76.4},
+            {name: "이준서", school: "제주중학교", schoolType: "middle", position: "middle", games: 20, points: 245, attackRate: 67.3, blocks: 49, aces: 14, receiveRate: 63.1},
+            {name: "박소영", school: "충북여중", schoolType: "middle", position: "outside", games: 25, points: 276, attackRate: 61.8, blocks: 27, aces: 20, receiveRate: 87.8},
+            {name: "정민기", school: "경북고등학교", schoolType: "high", position: "opposite", games: 24, points: 367, attackRate: 73.2, blocks: 41, aces: 39, receiveRate: 57.2},
+            {name: "황지원", school: "서울중학교", schoolType: "middle", position: "setter", games: 28, points: 182, attackRate: 48.9, blocks: 28, aces: 42, receiveRate: 71.5},
+            {name: "고은비", school: "부산여중", schoolType: "middle", position: "middle", games: 27, points: 305, attackRate: 74.5, blocks: 72, aces: 21, receiveRate: 61.9},
+            {name: "서지석", school: "대구고등학교", schoolType: "high", position: "libero", games: 26, points: 115, attackRate: 41.2, blocks: 15, aces: 18, receiveRate: 95.3},
+            {name: "유하늘", school: "광주고등학교", schoolType: "high", position: "outside", games: 25, points: 315, attackRate: 67.8, blocks: 38, aces: 33, receiveRate: 84.2},
+            {name: "임도현", school: "인천여고", schoolType: "high", position: "opposite", games: 24, points: 412, attackRate: 78.1, blocks: 45, aces: 48, receiveRate: 52.4}
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateAndRenderTeamRankings();
+        });
+
+        function calculateAndRenderTeamRankings() {
+            const teams = {};
+
+            // 1. Group players by school and aggregate stats
+            playersData.forEach(player => {
+                if (!teams[player.school]) {
+                    teams[player.school] = {
+                        name: player.school,
+                        playerCount: 0,
+                        totalPoints: 0,
+                        totalAttackRate: 0,
+                        totalBlocks: 0,
+                        totalAces: 0,
+                    };
+                }
+                const team = teams[player.school];
+                team.playerCount++;
+                team.totalPoints += player.points;
+                team.totalAttackRate += player.attackRate;
+                team.totalBlocks += player.blocks;
+                team.totalAces += player.aces;
+            });
+
+            // 2. Calculate averages and create a sortable array
+            const rankedTeams = Object.values(teams).map(team => ({
+                name: team.name,
+                playerCount: team.playerCount,
+                avgPoints: (team.totalPoints / team.playerCount).toFixed(2),
+                avgAttackRate: (team.totalAttackRate / team.playerCount).toFixed(2),
+                totalBlocks: team.totalBlocks,
+                totalAces: team.totalAces,
+            }));
+
+            // 3. Sort teams by average points (descending)
+            rankedTeams.sort((a, b) => b.avgPoints - a.avgPoints);
+
+            // 4. Render the table
+            const tbody = document.getElementById('teamRankingBody');
+            tbody.innerHTML = rankedTeams.map((team, index) => `
+                <tr>
+                    <td class="rank">${index + 1}</td>
+                    <td class="team-name">${team.name}</td>
+                    <td>${team.playerCount}</td>
+                    <td>${team.avgPoints}</td>
+                    <td>${team.avgAttackRate}%</td>
+                    <td>${team.totalBlocks}</td>
+                    <td>${team.totalAces}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
