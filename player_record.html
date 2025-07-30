@@ -16,9 +16,9 @@
             </div>
             <nav class="nav">
                 <a href="index.html" class="nav-link">홈</a>
+                <a href="team_ranking.html" class="nav-link">팀 순위</a>
                 <a href="player_record.html" class="nav-link active">선수 기록</a>
-                <a href="#" class="nav-link">팀 순위</a>
-                <a href="#" class="nav-link">통계</a>
+                <a href="player_certification.html" class="nav-link hide-on-mobile">기록 증명서</a>
             </nav>
         </div>
     </header>
@@ -65,7 +65,7 @@
                     <i class="fas fa-users"></i>
                 </div>
                 <div class="stat-info">
-                    <div class="stat-number" id="totalPlayers">2,847</div>
+                    <div class="stat-number" id="totalPlayers">0</div>
                     <div class="stat-label">총 선수 수</div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                     <i class="fas fa-trophy"></i>
                 </div>
                 <div class="stat-info">
-                    <div class="stat-number" id="filteredPlayers">2,847</div>
+                    <div class="stat-number" id="filteredPlayers">0</div>
                     <div class="stat-label">검색 결과</div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
         <div class="table-container">
             <div class="table-header">
                 <h2>선수 기록</h2>
-                <div class="table-actions">
+                <div class="table-actions hide-on-mobile">
                     <button class="btn btn-outline" onclick="exportData()">
                         <i class="fas fa-download"></i> 엑셀 다운로드
                     </button>
@@ -165,9 +165,9 @@
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="player-info">
-                        <h2 id="modalPlayerName">김철수</h2>
-                        <p id="modalPlayerSchool">서울고등학교</p>
-                        <p id="modalPlayerPosition">아웃사이드 히터</p>
+                        <h2 id="modalPlayerName"></h2>
+                        <p id="modalPlayerSchool"></p>
+                        <p id="modalPlayerPosition"></p>
                     </div>
                 </div>
                 
@@ -175,27 +175,27 @@
                     <div class="stats-grid">
                         <div class="stat-item">
                             <div class="stat-title">총 경기 수</div>
-                            <div class="stat-value" id="modalGames">24</div>
+                            <div class="stat-value" id="modalGames"></div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-title">총 득점</div>
-                            <div class="stat-value" id="modalPoints">342</div>
+                            <div class="stat-value" id="modalPoints"></div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-title">어택 성공률</div>
-                            <div class="stat-value" id="modalAttackRate">68.5%</div>
+                            <div class="stat-value" id="modalAttackRate"></div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-title">블록 포인트</div>
-                            <div class="stat-value" id="modalBlocks">45</div>
+                            <div class="stat-value" id="modalBlocks"></div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-title">서브 에이스</div>
-                            <div class="stat-value" id="modalAces">28</div>
+                            <div class="stat-value" id="modalAces"></div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-title">리시브 성공률</div>
-                            <div class="stat-value" id="modalReceiveRate">82.3%</div>
+                            <div class="stat-value" id="modalReceiveRate"></div>
                         </div>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
 
         /* 헤더 */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #667eea;
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -707,6 +707,15 @@
 
         /* 반응형 디자인 */
         @media screen and (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                gap: 1rem;
+            }
+
             .search-controls {
                 flex-direction: column;
                 align-items: stretch;
@@ -734,6 +743,10 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .hide-on-mobile {
+                display: none;
+            }
         }
 
         @media screen and (max-width: 480px) {
@@ -746,32 +759,37 @@
     <script>
         // 샘플 데이터
         const playersData = [
-            {name: "김철수", school: "서울고등학교", schoolType: "high", position: "outside", games: 24, points: 342, attackRate: 68.5, blocks: 45, aces: 28},
-            {name: "이영희", school: "부산여고", schoolType: "high", position: "setter", games: 22, points: 156, attackRate: 45.2, blocks: 23, aces: 34},
-            {name: "박민수", school: "대구중학교", schoolType: "middle", position: "middle", games: 26, points: 289, attackRate: 72.1, blocks: 67, aces: 19},
-            {name: "정하나", school: "광주여중", schoolType: "middle", position: "libero", games: 25, points: 98, attackRate: 35.8, blocks: 12, aces: 15},
-            {name: "최대성", school: "인천고등학교", schoolType: "high", position: "opposite", games: 23, points: 398, attackRate: 75.3, blocks: 38, aces: 41},
-            {name: "송미래", school: "울산여고", schoolType: "high", position: "outside", games: 21, points: 267, attackRate: 63.7, blocks: 29, aces: 22},
-            {name: "윤태진", school: "대전중학교", schoolType: "middle", position: "setter", games: 24, points: 134, attackRate: 42.1, blocks: 18, aces: 29},
-            {name: "한수정", school: "경기여고", schoolType: "high", position: "middle", games: 25, points: 312, attackRate: 69.8, blocks: 58, aces: 16},
-            {name: "남준호", school: "강원고등학교", schoolType: "high", position: "opposite", games: 22, points: 356, attackRate: 71.4, blocks: 42, aces: 37},
-            {name: "배서연", school: "충남여중", schoolType: "middle", position: "libero", games: 26, points: 87, attackRate: 38.9, blocks: 8, aces: 12},
-            {name: "조현우", school: "전북고등학교", schoolType: "high", position: "outside", games: 24, points: 298, attackRate: 65.2, blocks: 33, aces: 25},
-            {name: "김나연", school: "경남여고", schoolType: "high", position: "setter", games: 23, points: 142, attackRate: 44.6, blocks: 21, aces: 31},
-            {name: "이준서", school: "제주중학교", schoolType: "middle", position: "middle", games: 20, points: 245, attackRate: 67.3, blocks: 49, aces: 14},
-            {name: "박소영", school: "충북여중", schoolType: "middle", position: "outside", games: 25, points: 276, attackRate: 61.8, blocks: 27, aces: 20},
-            {name: "정민기", school: "경북고등학교", schoolType: "high", position: "opposite", games: 24, points: 367, attackRate: 73.2, blocks: 41, aces: 39}
+            {name: "김철수", school: "서울고등학교", schoolType: "high", position: "outside", games: 24, points: 342, attackRate: 68.5, blocks: 45, aces: 28, receiveRate: 82.3},
+            {name: "이영희", school: "부산여고", schoolType: "high", position: "setter", games: 22, points: 156, attackRate: 45.2, blocks: 23, aces: 34, receiveRate: 78.1},
+            {name: "박민수", school: "대구중학교", schoolType: "middle", position: "middle", games: 26, points: 289, attackRate: 72.1, blocks: 67, aces: 19, receiveRate: 65.4},
+            {name: "정하나", school: "광주여중", schoolType: "middle", position: "libero", games: 25, points: 98, attackRate: 35.8, blocks: 12, aces: 15, receiveRate: 91.2},
+            {name: "최대성", school: "인천고등학교", schoolType: "high", position: "opposite", games: 23, points: 398, attackRate: 75.3, blocks: 38, aces: 41, receiveRate: 55.8},
+            {name: "송미래", school: "울산여고", schoolType: "high", position: "outside", games: 21, points: 267, attackRate: 63.7, blocks: 29, aces: 22, receiveRate: 85.1},
+            {name: "윤태진", school: "대전중학교", schoolType: "middle", position: "setter", games: 24, points: 134, attackRate: 42.1, blocks: 18, aces: 29, receiveRate: 72.9},
+            {name: "한수정", school: "경기여고", schoolType: "high", position: "middle", games: 25, points: 312, attackRate: 69.8, blocks: 58, aces: 16, receiveRate: 68.7},
+            {name: "남준호", school: "강원고등학교", schoolType: "high", position: "opposite", games: 22, points: 356, attackRate: 71.4, blocks: 42, aces: 37, receiveRate: 59.3},
+            {name: "배서연", school: "충남여중", schoolType: "middle", position: "libero", games: 26, points: 87, attackRate: 38.9, blocks: 8, aces: 12, receiveRate: 93.5},
+            {name: "조현우", school: "전북고등학교", schoolType: "high", position: "outside", games: 24, points: 298, attackRate: 65.2, blocks: 33, aces: 25, receiveRate: 83.6},
+            {name: "김나연", school: "경남여고", schoolType: "high", position: "setter", games: 23, points: 142, attackRate: 44.6, blocks: 21, aces: 31, receiveRate: 76.4},
+            {name: "이준서", school: "제주중학교", schoolType: "middle", position: "middle", games: 20, points: 245, attackRate: 67.3, blocks: 49, aces: 14, receiveRate: 63.1},
+            {name: "박소영", school: "충북여중", schoolType: "middle", position: "outside", games: 25, points: 276, attackRate: 61.8, blocks: 27, aces: 20, receiveRate: 87.8},
+            {name: "정민기", school: "경북고등학교", schoolType: "high", position: "opposite", games: 24, points: 367, attackRate: 73.2, blocks: 41, aces: 39, receiveRate: 57.2},
+            {name: "황지원", school: "서울중학교", schoolType: "middle", position: "setter", games: 28, points: 182, attackRate: 48.9, blocks: 28, aces: 42, receiveRate: 71.5},
+            {name: "고은비", school: "부산여중", schoolType: "middle", position: "middle", games: 27, points: 305, attackRate: 74.5, blocks: 72, aces: 21, receiveRate: 61.9},
+            {name: "서지석", school: "대구고등학교", schoolType: "high", position: "libero", games: 26, points: 115, attackRate: 41.2, blocks: 15, aces: 18, receiveRate: 95.3},
+            {name: "유하늘", school: "광주고등학교", schoolType: "high", position: "outside", games: 25, points: 315, attackRate: 67.8, blocks: 38, aces: 33, receiveRate: 84.2},
+            {name: "임도현", school: "인천여고", schoolType: "high", position: "opposite", games: 24, points: 412, attackRate: 78.1, blocks: 45, aces: 48, receiveRate: 52.4}
         ];
 
         let filteredData = [...playersData];
         let currentPage = 1;
         let itemsPerPage = 10;
-        let currentSort = {column: -1, direction: "asc"};
+        let currentSort = { column: 0, direction: 'asc' };
 
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
-            renderTable();
-            renderPagination();
+            // 초기 정렬 (순위 기준)
+            sortTable(0);
             setupEventListeners();
         });
 
@@ -781,13 +799,9 @@
             document.getElementById('schoolFilter').addEventListener('change', filterPlayers);
             document.getElementById('positionFilter').addEventListener('change', filterPlayers);
             
-            // 모달 닫기
-            document.querySelector('.close').onclick = function() {
-                document.getElementById('playerModal').style.display = 'none';
-            }
-            
-            window.onclick = function(event) {
-                const modal = document.getElementById('playerModal');
+            const modal = document.getElementById('playerModal');
+            modal.querySelector('.close').onclick = () => modal.style.display = 'none';
+            window.onclick = (event) => {
                 if (event.target == modal) {
                     modal.style.display = 'none';
                 }
@@ -797,6 +811,8 @@
         // 테이블 렌더링
         function renderTable() {
             const tbody = document.getElementById('playersTableBody');
+            if (!tbody) return;
+
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const pageData = filteredData.slice(start, end);
@@ -812,20 +828,21 @@
                     <td>${player.attackRate}%</td>
                     <td>${player.blocks}</td>
                     <td>${player.aces}</td>
-                    <td><button class="view-btn" onclick="showPlayerDetail(${start + index})">상세보기</button></td>
+                    <td><button class="view-btn" onclick='showPlayerDetail(${JSON.stringify(player)})'>상세보기</button></td>
                 </tr>
             `).join('');
 
-            // 통계 업데이트
             document.getElementById('filteredPlayers').textContent = filteredData.length.toLocaleString();
+            document.getElementById('totalPlayers').textContent = playersData.length.toLocaleString();
+            renderPagination();
         }
 
         // 포지션 이름 변환
         function getPositionName(position) {
             const positions = {
                 setter: "세터",
-                outside: "아웃사이드",
-                middle: "미들",
+                outside: "아웃사이드 히터",
+                middle: "미들 블로커",
                 opposite: "오포지트",
                 libero: "리베로"
             };
@@ -842,3 +859,126 @@
                 const matchesSearch = player.name.toLowerCase().includes(searchTerm);
                 const matchesSchool = !schoolFilter || player.schoolType === schoolFilter;
                 const matchesPosition = !positionFilter || player.position === positionFilter;
+                return matchesSearch && matchesSchool && matchesPosition;
+            });
+
+            currentPage = 1;
+            sortTable(currentSort.column, true); // 현재 정렬 유지
+        }
+        
+        function resetFilters() {
+            document.getElementById('playerSearch').value = '';
+            document.getElementById('schoolFilter').value = '';
+            document.getElementById('positionFilter').value = '';
+            filteredData = [...playersData];
+            currentPage = 1;
+            sortTable(0); // 기본 순위로 정렬
+        }
+
+        function sortTable(columnIndex, keepDirection = false) {
+            let direction = 'asc';
+            if (!keepDirection) {
+                direction = currentSort.column === columnIndex && currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                direction = currentSort.direction;
+            }
+            
+            currentSort = { column: columnIndex, direction };
+            const keys = ['rank', 'name', 'school', 'position', 'games', 'points', 'attackRate', 'blocks', 'aces'];
+            const sortKey = keys[columnIndex];
+
+            filteredData.sort((a, b) => {
+                let valA = a[sortKey];
+                let valB = b[sortKey];
+
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                }
+
+                if (valA < valB) return direction === 'asc' ? -1 : 1;
+                if (valA > b[sortKey]) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            // 순위(rank)는 정렬 후 재계산 필요 없음 (항상 1부터 시작)
+            if (columnIndex !== 0) {
+                 // 순위 외 다른 컬럼 정렬
+            }
+
+            renderTable();
+        }
+
+        function changePage(offset) {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const newPage = currentPage + offset;
+
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderTable();
+            }
+        }
+
+        function renderPagination() {
+            const pageNumbers = document.getElementById('pageNumbers');
+            if (!pageNumbers) return;
+            
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            pageNumbers.innerHTML = '';
+
+            // 이전/다음 버튼 활성/비활성
+            document.querySelector('.pagination .page-btn:first-child').disabled = currentPage === 1;
+            document.querySelector('.pagination .page-btn:last-child').disabled = currentPage === totalPages;
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-number ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                pageNumbers.appendChild(pageBtn);
+            }
+        }
+
+        function showPlayerDetail(player) {
+            document.getElementById('modalPlayerName').textContent = player.name;
+            document.getElementById('modalPlayerSchool').textContent = player.school;
+            document.getElementById('modalPlayerPosition').textContent = getPositionName(player.position);
+            document.getElementById('modalGames').textContent = player.games;
+            document.getElementById('modalPoints').textContent = player.points;
+            document.getElementById('modalAttackRate').textContent = player.attackRate + '%';
+            document.getElementById('modalBlocks').textContent = player.blocks;
+            document.getElementById('modalAces').textContent = player.aces;
+            document.getElementById('modalReceiveRate').textContent = player.receiveRate + '%';
+
+            const recentGamesContainer = document.getElementById('recentGames');
+            recentGamesContainer.innerHTML = `
+                <div class="game-item">vs. 부산여고 - 득점: ${Math.floor(player.points / 3)}, 블록: ${Math.floor(player.blocks / 3)}</div>
+                <div class="game-item">vs. 대구중학교 - 득점: ${Math.floor(player.points / 4)}, 블록: ${Math.floor(player.blocks / 4)}</div>
+                <div class="game-item">vs. 광주여중 - 득점: ${Math.floor(player.points / 5)}, 블록: ${Math.floor(player.blocks / 5)}</div>
+            `;
+
+            document.getElementById('playerModal').style.display = 'block';
+        }
+
+        function exportData() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "이름,학교,포지션,경기 수,득점,어택 성공률,블록,서브 에이스,리시브 성공률\n";
+            filteredData.forEach(p => {
+                csvContent += `${p.name},${p.school},${getPositionName(p.position)},${p.games},${p.points},${p.attackRate},${p.blocks},${p.aces},${p.receiveRate}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "player_records.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+
+</body>
+</html>

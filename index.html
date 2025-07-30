@@ -15,24 +15,20 @@
                 <span>배구 연맹 데이터</span>
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link">홈</a>
+                <a href="index.html" class="nav-link active">홈</a>
+                <a href="team_ranking.html" class="nav-link">팀 순위</a>
                 <a href="player_record.html" class="nav-link">선수 기록</a>
-                <a href="#" class="nav-link">팀 순위</a>
-                <a href="#" class="nav-link">통계</a>
+                <a href="player_certification.html" class="nav-link hide-on-mobile">기록 증명서</a>
             </nav>
         </div>
     </header>
 
-    <div class="home-container">
+    <div class="container">
         <!-- 히어로 섹션 -->
         <section class="hero">
             <div class="hero-content">
                 <h1>중고등학교 배구 연맹</h1>
                 <p>전국 중고등학교 배구 선수들의 기록과 팀 순위를 한눈에</p>
-                <div class="hero-buttons">
-                    <a href="#" class="btn btn-primary">선수 기록 보기</a>
-                    <a href="#" class="btn btn-secondary">팀 순위 보기</a>
-                </div>
             </div>
             <div class="hero-stats">
                 <div class="stat-item">
@@ -59,8 +55,7 @@
                 <h3>선수 개인 기록</h3>
                 <p>각 선수의 상세한 경기 기록과 통계를 확인하고 이름으로 검색할 수 있습니다</p>
                 <div class="feature-actions">
-                    <a href="#" class="btn btn-outline">기록 보기</a>
-                    <a href="#" class="btn btn-text">검색하기</a>
+                    <a href="player_record.html" class="btn btn-outline">기록 보기</a>
                 </div>
             </div>
 
@@ -71,8 +66,7 @@
                 <h3>팀 순위</h3>
                 <p>실시간 팀 순위와 승률, 경기 결과를 확인할 수 있습니다</p>
                 <div class="feature-actions">
-                    <a href="#" class="btn btn-outline">순위 보기</a>
-                    <a href="#" class="btn btn-text">경기 일정</a>
+                    <a href="team_ranking.html" class="btn btn-outline">순위 보기</a>
                 </div>
             </div>
 
@@ -93,7 +87,7 @@
             <h2>최근 경기 결과</h2>
             <div class="matches-grid">
                 <div class="match-card">
-                    <div class="match-date">2024.03.15</div>
+                    <div class="match-date">2025.03.15</div>
                     <div class="match-teams">
                         <div class="team home">
                             <span class="team-name">서울고등학교</span>
@@ -101,15 +95,15 @@
                         </div>
                         <div class="vs">VS</div>
                         <div class="team away">
-                            <span class="team-score">1</span>
                             <span class="team-name">경기고등학교</span>
+                            <span class="team-score">1</span>
                         </div>
                     </div>
                     <div class="match-status completed">경기 종료</div>
                 </div>
 
                 <div class="match-card">
-                    <div class="match-date">2024.03.14</div>
+                    <div class="match-date">2025.03.14</div>
                     <div class="match-teams">
                         <div class="team home">
                             <span class="team-name">부산중학교</span>
@@ -117,15 +111,15 @@
                         </div>
                         <div class="vs">VS</div>
                         <div class="team away">
-                            <span class="team-score">3</span>
                             <span class="team-name">대구중학교</span>
+                            <span class="team-score">3</span>
                         </div>
                     </div>
                     <div class="match-status completed">경기 종료</div>
                 </div>
 
                 <div class="match-card">
-                    <div class="match-date">2024.03.16</div>
+                    <div class="match-date">2025.09.16</div>
                     <div class="match-teams">
                         <div class="team home">
                             <span class="team-name">광주고등학교</span>
@@ -133,8 +127,8 @@
                         </div>
                         <div class="vs">VS</div>
                         <div class="team away">
-                            <span class="team-score">-</span>
                             <span class="team-name">대전고등학교</span>
+                            <span class="team-score">-</span>
                         </div>
                     </div>
                     <div class="match-status upcoming">예정</div>
@@ -146,21 +140,9 @@
         <section class="quick-access">
             <h2>빠른 접근</h2>
             <div class="quick-buttons">
-                <a href="#" class="quick-btn">
-                    <i class="fas fa-search"></i>
-                    <span>선수 검색</span>
-                </a>
-                <a href="#" class="quick-btn">
-                    <i class="fas fa-list-ol"></i>
-                    <span>팀 순위</span>
-                </a>
-                <a href="#" class="quick-btn">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>통계 보기</span>
-                </a>
-                <a href="#" class="quick-btn">
-                    <i class="fas fa-calendar"></i>
-                    <span>경기 일정</span>
+                <a href="http://kuvf.co.kr/" class="quick-btn">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span>대학배구연맹</span>
                 </a>
             </div>
         </section>
@@ -201,7 +183,7 @@
 
         /* 헤더 */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #667eea;
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -211,7 +193,7 @@
         }
 
         .header-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 1rem;
             display: flex;
@@ -242,17 +224,22 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
         }
 
-        .nav-link:hover {
+        .nav-link:hover, .nav-link.active {
             color: #ffd700;
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* 컨테이너 */
-        .home-container {
-            max-width: 1200px;
+        /* Container */
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-bottom: 2rem;            
         }
 
         /* 히어로 섹션 */
@@ -647,6 +634,10 @@
 
             .quick-buttons {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hide-on-mobile {
+                display: none;
             }
         }
 
