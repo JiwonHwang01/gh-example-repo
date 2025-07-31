@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>팀 순위 - 중고등학교 배구 연맹</title>
+    <title>팀 순위 - 중고등 배구 데이터</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -201,7 +201,7 @@
         <!-- Page Header -->
         <div class="page-header">
             <h1><i class="fas fa-trophy"></i> 팀 순위</h1>
-            <p>학교별 팀 순위와 주요 통계를 확인하세요</p>
+            <p>학교(팀) 순위와 주요 통계를 확인하세요</p>
         </div>
 
         <!-- Team Ranking Table -->
@@ -215,11 +215,11 @@
                         <tr>
                             <th>순위</th>
                             <th>학교</th>
-                            <th>선수 수</th>
+                            <th class="hide-on-mobile">선수 수</th>
                             <th>평균 득점</th>
-                            <th>평균 어택 성공률</th>
-                            <th>총 블록</th>
-                            <th>총 서브에이스</th>
+                            <th class="hide-on-mobile">평균 어택 성공률</th>
+                            <th class="hide-on-mobile">총 블록</th>
+                            <th class="hide-on-mobile">총 서브에이스</th>
                         </tr>
                     </thead>
                     <tbody id="teamRankingBody">
@@ -300,11 +300,11 @@
                 <tr>
                     <td class="rank">${index + 1}</td>
                     <td class="team-name">${team.name}</td>
-                    <td>${team.playerCount}</td>
+                    <td class="hide-on-mobile">${team.playerCount}</td>
                     <td>${team.avgPoints}</td>
-                    <td>${team.avgAttackRate}%</td>
-                    <td>${team.totalBlocks}</td>
-                    <td>${team.totalAces}</td>
+                    <td class="hide-on-mobile">${team.avgAttackRate}%</td>
+                    <td class="hide-on-mobile">${team.totalBlocks}</td>
+                    <td class="hide-on-mobile">${team.totalAces}</td>
                 </tr>
             `).join('');
         }
