@@ -19,6 +19,7 @@
                 <a href="team_ranking.html" class="nav-link">팀 순위</a>
                 <a href="player_record.html" class="nav-link active">선수 기록</a>
                 <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
+                <a href="admin.html" class="nav-link admin-only-nav" style="display:none;">관리자</a>
             </nav>
         </div>
     </header>
@@ -27,7 +28,7 @@
         <!-- 페이지 헤더 -->
         <div class="page-header">
             <h1><i class="fas fa-user-friends"></i> 선수 개인 기록</h1>
-            <p>중고등학교 배구 선수들의 상세 기록을 확인하세요</p>
+            <p>전국 중고등학교 배구 선수들의 상세 기록을 확인하세요</p>
         </div>
 
         <!-- 검색 및 필터 -->
@@ -769,6 +770,18 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
     </style>
 
     <script>
@@ -899,7 +912,8 @@
             let direction = 'asc';
             if (!keepDirection) {
                 direction = currentSort.column === columnIndex && currentSort.direction === 'asc' ? 'desc' : 'asc';
-            } else {
+            }
+            else {
                 direction = currentSort.direction;
             }
             
@@ -1000,5 +1014,11 @@
         }
     </script>
 
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Korea University Volleyball Federation (KUVF). All rights reserved.</p>
+            <p>Developer Contact: kuvf.dev@gmail.com (문의)</p>
+        </div>
+    </footer>
 </body>
 </html>

@@ -163,6 +163,18 @@
             color: #333;
         }
 
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
         @media screen and (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -193,6 +205,7 @@
                 <a href="team_ranking.html" class="nav-link active">팀 순위</a>
                 <a href="player_record.html" class="nav-link">선수 기록</a>
                 <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
+                <a href="admin.html" class="nav-link admin-only-nav" style="display:none;">관리자</a>
             </nav>
         </div>
     </header>
@@ -255,6 +268,9 @@
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                document.querySelector(".admin-only-nav").style.display = "inline-block";
+            }
             calculateAndRenderTeamRankings();
         });
 
@@ -300,14 +316,21 @@
                 <tr>
                     <td class="rank">${index + 1}</td>
                     <td class="team-name">${team.name}</td>
-                    <td class="hide-on-mobile">${team.playerCount}</td>
+                    <td>${team.playerCount}</td>
                     <td>${team.avgPoints}</td>
-                    <td class="hide-on-mobile">${team.avgAttackRate}%</td>
-                    <td class="hide-on-mobile">${team.totalBlocks}</td>
-                    <td class="hide-on-mobile">${team.totalAces}</td>
+                    <td>${team.avgAttackRate}%</td>
+                    <td>${team.totalBlocks}</td>
+                    <td>${team.totalAces}</td>
                 </tr>
             `).join('');
         }
     </script>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Korea University Volleyball Federation (KUVF). All rights reserved.</p>
+            <p>Developer Contact: kuvf.dev@gmail.com (문의)</p>
+        </div>
+    </footer>
 </body>
 </html>

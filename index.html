@@ -594,6 +594,17 @@
             border-radius: 5px;
             font-size: 1rem;
         }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
 
         /* 반응형 디자인 */
         @media screen and (max-width: 768px) {
@@ -655,9 +666,10 @@
             }
 
             .quick-buttons {
-                grid-template-columns: 1fr;
-            }
+            grid-template-columns: 1fr;
         }
+
+    }
     </style>
 
     <script>
@@ -676,6 +688,7 @@
         // 관리자 로그인 시뮬레이션
         function simulateAdminLogin() {
             isAdmin = true;
+            localStorage.setItem('isAdmin', 'true'); // Store admin state
             toggleAdminFeatures();
             
             // 헤더에 관리자 표시 추가
@@ -685,6 +698,9 @@
             adminIndicator.style.color = '#ffd700';
             adminIndicator.style.marginLeft = '1rem';
             nav.appendChild(adminIndicator);
+
+            // Show admin-only nav links
+            document.querySelectorAll('.admin-only-nav').forEach(el => el.style.display = 'inline-block');
         }
 
         // 모달 기능
@@ -725,8 +741,18 @@
 
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                simulateAdminLogin();
+            }
             toggleAdminFeatures();
         });
     </script>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Korea University Volleyball Federation (KUVF). All rights reserved.</p>
+            <p>Developer Contact: kuvf.dev@gmail.com (문의)</p>
+        </div>
+    </footer>
 </body>
 </html>
