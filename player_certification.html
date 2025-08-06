@@ -29,6 +29,10 @@
             border: 1px solid #ddd;
             font-size: 1rem;
         }
+        .controls label {
+            font-weight: 600;
+            color: #333;
+        }
         .controls button {
             background: #667eea;
             color: white;
@@ -36,7 +40,7 @@
         }
         .certificate {
             width: 210mm;
-            height: 297mm;
+            height: 287mm;
             padding: 20mm;
             background: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -83,6 +87,11 @@
         .records-table th {
             background-color: #f2f2f2;
         }
+        .records-table tbody tr:nth-child(2) td {
+            background-color: #f8f9fa;
+            font-style: italic;
+            color: #555;
+        }
         .certificate-footer {
             text-align: center;
             position: absolute;
@@ -98,21 +107,28 @@
             font-size: 16pt;
             font-weight: bold;
         }
+
         #playerSelect {
             display: none;
         }
-        
+
         @media print {
             body {
                 background-color: white;
             }
-            .controls {
+            .controls, .header {
                 display: none;
             }
             .certificate {
                 box-shadow: none;
                 margin: 0;
                 padding: 0;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .hide-on-mobile {
+                display: none;
             }
         }
     </style>
@@ -145,11 +161,11 @@
                 </table>
             </div>
             <div class="records-table">
-                <h3>주요 경기 기록</h3>
+                <h3 id="header-games">주요 경기 성적</h3>
                 <table>
                     <thead>
                         <tr>
-                            <th>총 경기 수</th>
+                            <th></th>
                             <th>총 득점</th>
                             <th>어택 성공률</th>
                             <th>블록</th>
@@ -159,12 +175,20 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td id="playerGames"></td>
+                            <td id="firstRow">기록</td>
                             <td id="playerPoints"></td>
                             <td id="playerAttackRate"></td>
                             <td id="playerBlocks"></td>
                             <td id="playerAces"></td>
                             <td id="playerReceiveRate"></td>
+                        </tr>
+                        <tr>                            
+                            <td id="firstRow">석차</td>
+                            <td id="playerPointsRank"></td>
+                            <td id="playerAttackRateRank"></td>
+                            <td id="playerBlocksRank"></td>
+                            <td id="playerAcesRank"></td>
+                            <td id="playerReceiveRateRank"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -211,17 +235,49 @@
             });
         }
 
+        function calculateRanking(playerIndex) {
+            const player = playersData[playerIndex];
+            const samePositionPlayers = playersData.filter(p => p.position === player.position);
+            const totalPlayers = samePositionPlayers.length;
+            
+            const rankings = {};
+            
+            // 각 항목별로 랭킹 계산 (내림차순 - 높은 값이 좋은 순위)
+            const descendingFields = ['games', 'points', 'attackRate', 'blocks', 'aces', 'receiveRate'];
+            
+            descendingFields.forEach(field => {
+                // 해당 필드로 정렬 (내림차순)
+                const sorted = [...samePositionPlayers].sort((a, b) => b[field] - a[field]);
+                const rank = sorted.findIndex(p => p.name === player.name) + 1;
+                rankings[field] = `${rank}/${totalPlayers}`;
+            });
+            
+            return rankings;
+        }
+
         function updateCertificate(playerIndex) {
             const player = playersData[playerIndex];
+            const rankings = calculateRanking(playerIndex);
+            
+            // 기본 정보 업데이트
             document.getElementById('playerName').textContent = player.name;
             document.getElementById('playerSchool').textContent = player.school;
-            document.getElementById('playerPosition').textContent = getPositionName(player.position);
-            document.getElementById('playerGames').textContent = player.games;
+            document.getElementById('playerPosition').textContent = getPositionName(player.position) + player.position;
+            
+            // 기록 업데이트
+            document.getElementById('header-games').textContent += " (총 " + player.games + " 경기)";
             document.getElementById('playerPoints').textContent = player.points;
             document.getElementById('playerAttackRate').textContent = player.attackRate + '%';
             document.getElementById('playerBlocks').textContent = player.blocks;
             document.getElementById('playerAces').textContent = player.aces;
             document.getElementById('playerReceiveRate').textContent = player.receiveRate + '%';
+            
+            // 석차 업데이트
+            document.getElementById('playerPointsRank').textContent = rankings.points;
+            document.getElementById('playerAttackRateRank').textContent = rankings.attackRate;
+            document.getElementById('playerBlocksRank').textContent = rankings.blocks;
+            document.getElementById('playerAcesRank').textContent = rankings.aces;
+            document.getElementById('playerReceiveRateRank').textContent = rankings.receiveRate;
         }
         
         function getPositionName(position) {
@@ -240,6 +296,9 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                document.querySelector(".admin-only-nav").style.display = "inline-block";
+            }
             populatePlayerSelect();
             updateCertificate(0);
         });

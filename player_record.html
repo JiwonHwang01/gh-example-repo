@@ -38,7 +38,19 @@
                     <i class="fas fa-search"></i>
                     <input type="text" id="playerSearch" placeholder="선수 이름으로 검색">
                 </div>
-                <div class="filter-group">
+                <div class="filter-group">                    
+                    <select id="seasonFilter">
+                        <option value="">시즌 선택</option>
+                        <!-- 동적으로 생성 -->
+                    </select>
+                    <select id="roundFilter">
+                        <option value="">라운드 선택</option>
+                        <!-- 동적으로 생성 -->
+                    </select>
+                    <select id="genderFilter">
+                        <option value="">성별 선택</option>
+                        <!-- 동적으로 생성 -->
+                    </select>
                     <select id="schoolFilter">
                         <option value="">모든 학교</option>
                         <option value="high">고등학교</option>
@@ -730,6 +742,12 @@
             .filter-group {
                 align-items: stretch;
                 flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .filter-group select {
+                width: 100%;
+                min-width: auto;
             }
             
             .search-controls {
@@ -784,93 +802,184 @@
         }
     </style>
 
+    <script src="data.js"></script>
     <script>
-        // 샘플 데이터
-        const playersData = [
-            {name: "김철수", school: "서울고등학교", schoolType: "high", position: "outside", games: 24, points: 342, attackRate: 68.5, blocks: 45, aces: 28, receiveRate: 82.3},
-            {name: "이영희", school: "부산여고", schoolType: "high", position: "setter", games: 22, points: 156, attackRate: 45.2, blocks: 23, aces: 34, receiveRate: 78.1},
-            {name: "박민수", school: "대구중학교", schoolType: "middle", position: "middle", games: 26, points: 289, attackRate: 72.1, blocks: 67, aces: 19, receiveRate: 65.4},
-            {name: "정하나", school: "광주여중", schoolType: "middle", position: "libero", games: 25, points: 98, attackRate: 35.8, blocks: 12, aces: 15, receiveRate: 91.2},
-            {name: "최대성", school: "인천고등학교", schoolType: "high", position: "opposite", games: 23, points: 398, attackRate: 75.3, blocks: 38, aces: 41, receiveRate: 55.8},
-            {name: "송미래", school: "울산여고", schoolType: "high", position: "outside", games: 21, points: 267, attackRate: 63.7, blocks: 29, aces: 22, receiveRate: 85.1},
-            {name: "윤태진", school: "대전중학교", schoolType: "middle", position: "setter", games: 24, points: 134, attackRate: 42.1, blocks: 18, aces: 29, receiveRate: 72.9},
-            {name: "한수정", school: "경기여고", schoolType: "high", position: "middle", games: 25, points: 312, attackRate: 69.8, blocks: 58, aces: 16, receiveRate: 68.7},
-            {name: "남준호", school: "강원고등학교", schoolType: "high", position: "opposite", games: 22, points: 356, attackRate: 71.4, blocks: 42, aces: 37, receiveRate: 59.3},
-            {name: "배서연", school: "충남여중", schoolType: "middle", position: "libero", games: 26, points: 87, attackRate: 38.9, blocks: 8, aces: 12, receiveRate: 93.5},
-            {name: "조현우", school: "전북고등학교", schoolType: "high", position: "outside", games: 24, points: 298, attackRate: 65.2, blocks: 33, aces: 25, receiveRate: 83.6},
-            {name: "김나연", school: "경남여고", schoolType: "high", position: "setter", games: 23, points: 142, attackRate: 44.6, blocks: 21, aces: 31, receiveRate: 76.4},
-            {name: "이준서", school: "제주중학교", schoolType: "middle", position: "middle", games: 20, points: 245, attackRate: 67.3, blocks: 49, aces: 14, receiveRate: 63.1},
-            {name: "박소영", school: "충북여중", schoolType: "middle", position: "outside", games: 25, points: 276, attackRate: 61.8, blocks: 27, aces: 20, receiveRate: 87.8},
-            {name: "정민기", school: "경북고등학교", schoolType: "high", position: "opposite", games: 24, points: 367, attackRate: 73.2, blocks: 41, aces: 39, receiveRate: 57.2},
-            {name: "황지원", school: "서울중학교", schoolType: "middle", position: "setter", games: 28, points: 182, attackRate: 48.9, blocks: 28, aces: 42, receiveRate: 71.5},
-            {name: "고은비", school: "부산여중", schoolType: "middle", position: "middle", games: 27, points: 305, attackRate: 74.5, blocks: 72, aces: 21, receiveRate: 61.9},
-            {name: "서지석", school: "대구고등학교", schoolType: "high", position: "libero", games: 26, points: 115, attackRate: 41.2, blocks: 15, aces: 18, receiveRate: 95.3},
-            {name: "유하늘", school: "광주고등학교", schoolType: "high", position: "outside", games: 25, points: 315, attackRate: 67.8, blocks: 38, aces: 33, receiveRate: 84.2},
-            {name: "임도현", school: "인천여고", schoolType: "high", position: "opposite", games: 24, points: 412, attackRate: 78.1, blocks: 45, aces: 48, receiveRate: 52.4}
-        ];
-
-        let filteredData = [...playersData];
+        let processedPlayersData = [];
+        let filteredData = [];
         let currentPage = 1;
         let itemsPerPage = 10;
         let currentSort = { column: 0, direction: 'asc' };
 
-        // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
-            // 초기 정렬 (순위 기준)
-            sortTable(0);
+            processPlayerData();
+            populateSeasonFilter();
+            updateDependentFilters(); // 초기 필터 채우기
+            filterPlayers(); // 초기 렌더링
             setupEventListeners();
         });
 
-        // 이벤트 리스너 설정
+        function processPlayerData() {
+            const playerStatsMap = new Map();
+
+            players.forEach(player => {
+                const team = teams.find(t => t.id === player.team_id);
+                playerStatsMap.set(player.id, {
+                    ...player,
+                    school: team ? team.name : '알 수 없음',
+                    schoolType: team ? team.school_level : '알 수 없음',
+                    games: 0,
+                    totalPoints: 0,
+                    totalAttackAttempts: 0,
+                    totalAttackSuccesses: 0,
+                    totalBlocks: 0,
+                    totalAces: 0,
+                    recentGames: [],
+                    tournaments: new Set(),
+                    seasons: new Set(),
+                    rounds: new Set(),
+                    genders: new Set()
+                });
+            });
+
+            stats.forEach(stat => {
+                const player = playerStatsMap.get(stat.player_id);
+                if (player) {
+                    const match = matches.find(m => m.id === stat.match_id);
+                    if (match) {
+                        const tournament = tournaments.find(t => t.id === match.tournament_id);
+                        if (tournament) {
+                            player.tournaments.add(tournament.id);
+                            player.seasons.add(tournament.season);
+                            player.rounds.add(tournament.round);
+                            player.genders.add(tournament.gender);
+                            
+                            player.games++;
+                            player.totalPoints += stat.points;
+                            player.totalBlocks += stat.blocks;
+                            player.totalAces += stat.aces;
+                            player.totalAttackSuccesses += stat.attack_rate; // This is a simplification
+                            player.totalAttackAttempts++; 
+
+                            player.recentGames.push({
+                                match_id: stat.match_id,
+                                points: stat.points,
+                                blocks: stat.blocks,
+                                aces: stat.aces
+                            });
+                        }
+                    }
+                }
+            });
+
+            processedPlayersData = Array.from(playerStatsMap.values()).map(player => ({
+                ...player,
+                points: player.totalPoints,
+                attackRate: player.totalAttackAttempts > 0 ? (player.totalAttackSuccesses / player.totalAttackAttempts).toFixed(1) : 0,
+                blocks: player.totalBlocks,
+                aces: player.totalAces,
+                receiveRate: 0, // Placeholder
+                seasons: Array.from(player.seasons),
+                rounds: Array.from(player.rounds),
+                genders: Array.from(player.genders)
+            }));
+        }
+
+        function populateSeasonFilter() {
+            const seasons = new Set(tournaments.map(t => t.season));
+            const seasonFilter = document.getElementById('seasonFilter');
+            Array.from(seasons).sort().forEach(season => {
+                seasonFilter.add(new Option(season + '년', season));
+            });
+        }
+
+        function updateDependentFilters() {
+            const seasonFilter = document.getElementById('seasonFilter');
+            const roundFilter = document.getElementById('roundFilter');
+            const genderFilter = document.getElementById('genderFilter');
+            const selectedSeason = seasonFilter.value;
+
+            const currentRound = roundFilter.value;
+            const currentGender = genderFilter.value;
+
+            roundFilter.innerHTML = '<option value="">라운드 선택</option>';
+            genderFilter.innerHTML = '<option value="">성별 선택</option>';
+
+            if (selectedSeason) {
+                roundFilter.style.display = 'inline-block';
+                genderFilter.style.display = 'inline-block';
+
+                const relevantTournaments = tournaments.filter(t => t.season == selectedSeason);
+                const rounds = new Set(relevantTournaments.map(t => t.round));
+                Array.from(rounds).sort().forEach(round => {
+                    roundFilter.add(new Option(round, round));
+                });
+
+                const genders = new Set(relevantTournaments.map(t => t.gender));
+                if (genders.has('male')) genderFilter.add(new Option('남자', 'male'));
+                if (genders.has('female')) genderFilter.add(new Option('여자', 'female'));
+
+                if (Array.from(roundFilter.options).some(opt => opt.value === currentRound)) roundFilter.value = currentRound;
+                if (Array.from(genderFilter.options).some(opt => opt.value === currentGender)) genderFilter.value = currentGender;
+
+            } else {
+                roundFilter.style.display = 'none';
+                genderFilter.style.display = 'none';
+            }
+        }
+
         function setupEventListeners() {
             document.getElementById('playerSearch').addEventListener('input', filterPlayers);
             document.getElementById('schoolFilter').addEventListener('change', filterPlayers);
             document.getElementById('positionFilter').addEventListener('change', filterPlayers);
+            document.getElementById('seasonFilter').addEventListener('change', () => {
+                updateDependentFilters();
+                filterPlayers();
+            });
+            document.getElementById('roundFilter').addEventListener('change', filterPlayers);
+            document.getElementById('genderFilter').addEventListener('change', filterPlayers);
             
             const modal = document.getElementById('playerModal');
             modal.querySelector('.close').onclick = () => modal.style.display = 'none';
             window.onclick = (event) => {
-                if (event.target == modal) {
-                    modal.style.display = 'none';
-                }
+                if (event.target == modal) modal.style.display = 'none';
             }
         }
 
-        // 테이블 렌더링
         function renderTable() {
             const tbody = document.getElementById('playersTableBody');
-            if (!tbody) return;
-
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const pageData = filteredData.slice(start, end);
 
-            tbody.innerHTML = pageData.map((player, index) => `
-                <tr>
-                    <td class="rank">${start + index + 1}</td>
-                    <td class="player-name">${player.name}</td>
-                    <td class="player-school hide-on-mobile">${player.school}</td>
-                    <td class="player-position hide-on-mobile"><span class="position ${player.position}">${getPositionName(player.position)}</span></td>
-                    <td class="player-games hide-on-mobile">${player.games}</td>
-                    <td class="player-points hide-on-mobile">${player.points}</td>
-                    <td class="player-attackRate hide-on-mobile">${player.attackRate}%</td>
-                    <td class="player-blocks hide-on-mobile">${player.blocks}</td>
-                    <td class="player-aces hide-on-mobile">${player.aces}</td>
-                    <td>
-                        <button class="view-btn" onclick='showPlayerDetail(${JSON.stringify(player)})'>
-                            <span class="long-text">상세보기</span>
-                            <span class="short-text">보기</span>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">데이터가 없습니다.</td></tr>';
+            } else {
+                tbody.innerHTML = pageData.map((player, index) => `
+                    <tr>
+                        <td class="rank">${start + index + 1}</td>
+                        <td class="player-name">${player.name}</td>
+                        <td class="player-school hide-on-mobile">${player.school}</td>
+                        <td class="player-position hide-on-mobile"><span class="position ${player.position}">${getPositionName(player.position)}</span></td>
+                        <td class="player-games hide-on-mobile">${player.games}</td>
+                        <td class="player-points hide-on-mobile">${player.points}</td>
+                        <td class="player-attackRate hide-on-mobile">${player.attackRate}%</td>
+                        <td class="player-blocks hide-on-mobile">${player.blocks}</td>
+                        <td class="player-aces hide-on-mobile">${player.aces}</td>
+                        <td>
+                            <button class="view-btn" onclick='showPlayerDetail(${JSON.stringify(player)})'>
+                                <span class="long-text">상세보기</span>
+                                <span class="short-text">보기</span>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
 
             document.getElementById('filteredPlayers').textContent = filteredData.length.toLocaleString();
-            document.getElementById('totalPlayers').textContent = playersData.length.toLocaleString();
+            document.getElementById('totalPlayers').textContent = processedPlayersData.length.toLocaleString();
             renderPagination();
         }
 
-        // 포지션 이름 변환
         function getPositionName(position) {
             const positions = {
                 setter: "세터",
@@ -882,38 +991,44 @@
             return positions[position] || position;
         }
 
-        // 선수 필터링
         function filterPlayers() {
             const searchTerm = document.getElementById('playerSearch').value.toLowerCase();
             const schoolFilter = document.getElementById('schoolFilter').value;
             const positionFilter = document.getElementById('positionFilter').value;
+            const seasonFilter = document.getElementById('seasonFilter').value;
+            const roundFilter = document.getElementById('roundFilter').value;
+            const genderFilter = document.getElementById('genderFilter').value;
 
-            filteredData = playersData.filter(player => {
+            filteredData = processedPlayersData.filter(player => {
                 const matchesSearch = player.name.toLowerCase().includes(searchTerm);
                 const matchesSchool = !schoolFilter || player.schoolType === schoolFilter;
                 const matchesPosition = !positionFilter || player.position === positionFilter;
-                return matchesSearch && matchesSchool && matchesPosition;
+                const matchesSeason = !seasonFilter || player.seasons.includes(parseInt(seasonFilter));
+                const matchesRound = !roundFilter || player.rounds.includes(roundFilter);
+                const matchesGender = !genderFilter || player.genders.includes(genderFilter);
+                
+                return matchesSearch && matchesSchool && matchesPosition && 
+                       matchesSeason && matchesRound && matchesGender;
             });
 
             currentPage = 1;
-            sortTable(currentSort.column, true); // 현재 정렬 유지
+            sortTable(currentSort.column, true);
         }
         
         function resetFilters() {
             document.getElementById('playerSearch').value = '';
             document.getElementById('schoolFilter').value = '';
             document.getElementById('positionFilter').value = '';
-            filteredData = [...playersData];
-            currentPage = 1;
-            sortTable(0); // 기본 순위로 정렬
+            document.getElementById('seasonFilter').value = '';
+            updateDependentFilters();
+            filterPlayers();
         }
 
         function sortTable(columnIndex, keepDirection = false) {
             let direction = 'asc';
             if (!keepDirection) {
                 direction = currentSort.column === columnIndex && currentSort.direction === 'asc' ? 'desc' : 'asc';
-            }
-            else {
+            } else {
                 direction = currentSort.direction;
             }
             
@@ -935,11 +1050,6 @@
                 return 0;
             });
             
-            // 순위(rank)는 정렬 후 재계산 필요 없음 (항상 1부터 시작)
-            if (columnIndex !== 0) {
-                 // 순위 외 다른 컬럼 정렬
-            }
-
             renderTable();
         }
 
@@ -960,7 +1070,6 @@
             const totalPages = Math.ceil(filteredData.length / itemsPerPage);
             pageNumbers.innerHTML = '';
 
-            // 이전/다음 버튼 활성/비활성
             document.querySelector('.pagination .page-btn:first-child').disabled = currentPage === 1;
             document.querySelector('.pagination .page-btn:last-child').disabled = currentPage === totalPages;
 
@@ -988,11 +1097,12 @@
             document.getElementById('modalReceiveRate').textContent = player.receiveRate + '%';
 
             const recentGamesContainer = document.getElementById('recentGames');
-            recentGamesContainer.innerHTML = `
-                <div class="game-item">vs. 부산여고 - 득점: ${Math.floor(player.points / 3)}, 블록: ${Math.floor(player.blocks / 3)}</div>
-                <div class="game-item">vs. 대구중학교 - 득점: ${Math.floor(player.points / 4)}, 블록: ${Math.floor(player.blocks / 4)}</div>
-                <div class="game-item">vs. 광주여중 - 득점: ${Math.floor(player.points / 5)}, 블록: ${Math.floor(player.blocks / 5)}</div>
-            `;
+            recentGamesContainer.innerHTML = player.recentGames.map(game => {
+                const match = matches.find(m => m.id === game.match_id);
+                const opponentTeamId = match.home_team_id === player.team_id ? match.away_team_id : match.home_team_id;
+                const opponentTeam = teams.find(t => t.id === opponentTeamId);
+                return `<div class="game-item">vs. ${opponentTeam ? opponentTeam.name : '알 수 없음'} - 득점: ${game.points}, 블록: ${game.blocks}, 에이스: ${game.aces}</div>`;
+            }).join('');
 
             document.getElementById('playerModal').style.display = 'block';
         }

@@ -101,26 +101,66 @@
             color: #666;
         }
 
-        /* Table Container */
+        /* 검색 섹션 */
+        .search-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-group select {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Table */
         .table-container {
             background: white;
             border-radius: 15px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .table-header h2 {
-            color: #333;
-            font-size: 1.5rem;
         }
 
         .table-wrapper {
@@ -132,23 +172,16 @@
             border-collapse: collapse;
         }
 
-        .ranking-table th {
-            background: #f8f9fa;
+        .ranking-table th, .ranking-table td {
             padding: 1rem;
             text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .ranking-table th {
+            background: #f8f9fa;
             font-weight: 600;
             color: #333;
-            white-space: nowrap;
-        }
-
-        .ranking-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #e9ecef;
-            white-space: nowrap;
-        }
-
-        .ranking-table tr:hover {
-            background: #f8f9fa;
         }
 
         .rank {
@@ -163,18 +196,7 @@
             color: #333;
         }
 
-        .footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-top: 3rem;
-        }
-
-        .footer-content p {
-            margin: 0.5rem 0;
-        }
-
+        /* 반응형 디자인 */
         @media screen and (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -188,12 +210,38 @@
             .hide-on-mobile {
                 display: none;
             }
+
+            .filter-group {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .filter-group select {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .search-controls {
+                align-items: stretch;
+                flex-direction: column;
+            }
         }
 
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <div class="logo">
@@ -211,120 +259,52 @@
     </header>
 
     <div class="container">
-        <!-- Page Header -->
         <div class="page-header">
             <h1><i class="fas fa-trophy"></i> 팀 순위</h1>
-            <p>학교(팀) 순위와 주요 통계를 확인하세요</p>
+            <p>시즌, 라운드, 성별로 필터링하여 학교(팀) 순위를 확인하세요.</p>
         </div>
 
-        <!-- Team Ranking Table -->
-        <div class="table-container">
-            <div class="table-header">
-                <h2>팀 순위</h2>
+        <!-- 검색 및 필터 -->
+        <div class="search-section">
+            <div class="search-controls">
+                <div class="filter-group">                    
+                    <select id="seasonFilter">
+                        <option value="">시즌 선택</option>
+                        <!-- 동적으로 생성 -->
+                    </select>
+                    <select id="roundFilter">
+                        <option value="">라운드 선택</option>
+                        <!-- 동적으로 생성 -->
+                    </select>
+                    <select id="genderFilter">
+                        <option value="">성별 선택</option>
+                        <!-- 동적으로 생성 -->
+                    </select>
+                    <button class="btn btn-outline" onclick="resetFilters()">
+                        <i class="fas fa-undo"></i> 초기화
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <div class="table-container">
             <div class="table-wrapper">
-                <table class="ranking-table" id="teamRankingTable">
+                <table class="ranking-table">
                     <thead>
                         <tr>
                             <th>순위</th>
                             <th>학교</th>
-                            <th class="hide-on-mobile">선수 수</th>
+                            <th>경기 수</th>
                             <th>평균 득점</th>
-                            <th class="hide-on-mobile">평균 어택 성공률</th>
-                            <th class="hide-on-mobile">총 블록</th>
-                            <th class="hide-on-mobile">총 서브에이스</th>
+                            <th class="hide-on-mobile">평균 블록</th>
+                            <th class="hide-on-mobile">평균 서브</th>
                         </tr>
                     </thead>
-                    <tbody id="teamRankingBody">
-                        <!-- Data will be dynamically generated by JavaScript -->
-                    </tbody>
+                    <tbody id="team-ranking-body"></tbody>
                 </table>
             </div>
         </div>
     </div>
-
-    <script>
-        const playersData = [
-            {name: "김철수", school: "서울고등학교", schoolType: "high", position: "outside", games: 24, points: 342, attackRate: 68.5, blocks: 45, aces: 28, receiveRate: 82.3},
-            {name: "이영희", school: "부산여고", schoolType: "high", position: "setter", games: 22, points: 156, attackRate: 45.2, blocks: 23, aces: 34, receiveRate: 78.1},
-            {name: "박민수", school: "대구중학교", schoolType: "middle", position: "middle", games: 26, points: 289, attackRate: 72.1, blocks: 67, aces: 19, receiveRate: 65.4},
-            {name: "정하나", school: "광주여중", schoolType: "middle", position: "libero", games: 25, points: 98, attackRate: 35.8, blocks: 12, aces: 15, receiveRate: 91.2},
-            {name: "최대성", school: "인천고등학교", schoolType: "high", position: "opposite", games: 23, points: 398, attackRate: 75.3, blocks: 38, aces: 41, receiveRate: 55.8},
-            {name: "송미래", school: "울산여고", schoolType: "high", position: "outside", games: 21, points: 267, attackRate: 63.7, blocks: 29, aces: 22, receiveRate: 85.1},
-            {name: "윤태진", school: "대전중학교", schoolType: "middle", position: "setter", games: 24, points: 134, attackRate: 42.1, blocks: 18, aces: 29, receiveRate: 72.9},
-            {name: "한수정", school: "경기여고", schoolType: "high", position: "middle", games: 25, points: 312, attackRate: 69.8, blocks: 58, aces: 16, receiveRate: 68.7},
-            {name: "남준호", school: "강원고등학교", schoolType: "high", position: "opposite", games: 22, points: 356, attackRate: 71.4, blocks: 42, aces: 37, receiveRate: 59.3},
-            {name: "배서연", school: "충남여중", schoolType: "middle", position: "libero", games: 26, points: 87, attackRate: 38.9, blocks: 8, aces: 12, receiveRate: 93.5},
-            {name: "조현우", school: "전북고등학교", schoolType: "high", position: "outside", games: 24, points: 298, attackRate: 65.2, blocks: 33, aces: 25, receiveRate: 83.6},
-            {name: "김나연", school: "경남여고", schoolType: "high", position: "setter", games: 23, points: 142, attackRate: 44.6, blocks: 21, aces: 31, receiveRate: 76.4},
-            {name: "이준서", school: "제주중학교", schoolType: "middle", position: "middle", games: 20, points: 245, attackRate: 67.3, blocks: 49, aces: 14, receiveRate: 63.1},
-            {name: "박소영", school: "충북여중", schoolType: "middle", position: "outside", games: 25, points: 276, attackRate: 61.8, blocks: 27, aces: 20, receiveRate: 87.8},
-            {name: "정민기", school: "경북고등학교", schoolType: "high", position: "opposite", games: 24, points: 367, attackRate: 73.2, blocks: 41, aces: 39, receiveRate: 57.2},
-            {name: "황지원", school: "서울중학교", schoolType: "middle", position: "setter", games: 28, points: 182, attackRate: 48.9, blocks: 28, aces: 42, receiveRate: 71.5},
-            {name: "고은비", school: "부산여중", schoolType: "middle", position: "middle", games: 27, points: 305, attackRate: 74.5, blocks: 72, aces: 21, receiveRate: 61.9},
-            {name: "서지석", school: "대구고등학교", schoolType: "high", position: "libero", games: 26, points: 115, attackRate: 41.2, blocks: 15, aces: 18, receiveRate: 95.3},
-            {name: "유하늘", school: "광주고등학교", schoolType: "high", position: "outside", games: 25, points: 315, attackRate: 67.8, blocks: 38, aces: 33, receiveRate: 84.2},
-            {name: "임도현", school: "인천여고", schoolType: "high", position: "opposite", games: 24, points: 412, attackRate: 78.1, blocks: 45, aces: 48, receiveRate: 52.4}
-        ];
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('isAdmin') === 'true') {
-                document.querySelector(".admin-only-nav").style.display = "inline-block";
-            }
-            calculateAndRenderTeamRankings();
-        });
-
-        function calculateAndRenderTeamRankings() {
-            const teams = {};
-
-            // 1. Group players by school and aggregate stats
-            playersData.forEach(player => {
-                if (!teams[player.school]) {
-                    teams[player.school] = {
-                        name: player.school,
-                        playerCount: 0,
-                        totalPoints: 0,
-                        totalAttackRate: 0,
-                        totalBlocks: 0,
-                        totalAces: 0,
-                    };
-                }
-                const team = teams[player.school];
-                team.playerCount++;
-                team.totalPoints += player.points;
-                team.totalAttackRate += player.attackRate;
-                team.totalBlocks += player.blocks;
-                team.totalAces += player.aces;
-            });
-
-            // 2. Calculate averages and create a sortable array
-            const rankedTeams = Object.values(teams).map(team => ({
-                name: team.name,
-                playerCount: team.playerCount,
-                avgPoints: (team.totalPoints / team.playerCount).toFixed(2),
-                avgAttackRate: (team.totalAttackRate / team.playerCount).toFixed(2),
-                totalBlocks: team.totalBlocks,
-                totalAces: team.totalAces,
-            }));
-
-            // 3. Sort teams by average points (descending)
-            rankedTeams.sort((a, b) => b.avgPoints - a.avgPoints);
-
-            // 4. Render the table
-            const tbody = document.getElementById('teamRankingBody');
-            tbody.innerHTML = rankedTeams.map((team, index) => `
-                <tr>
-                    <td class="rank">${index + 1}</td>
-                    <td class="team-name">${team.name}</td>
-                    <td>${team.playerCount}</td>
-                    <td>${team.avgPoints}</td>
-                    <td>${team.avgAttackRate}%</td>
-                    <td>${team.totalBlocks}</td>
-                    <td>${team.totalAces}</td>
-                </tr>
-            `).join('');
-        }
-    </script>
 
     <footer class="footer">
         <div class="footer-content">
@@ -332,5 +312,173 @@
             <p>Developer Contact: kuvf.dev@gmail.com (문의)</p>
         </div>
     </footer>
+
+    <script src="data.js"></script>
+    <script>
+        // --- Render Logic ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateSeasonFilter();
+            updateDependentFilters();
+            render();
+            setupEventListeners();
+        });
+
+        function populateSeasonFilter() {
+            const seasons = new Set(tournaments.map(t => t.season));
+            const seasonFilter = document.getElementById('seasonFilter');
+            
+            Array.from(seasons).sort().forEach(season => {
+                const option = document.createElement('option');
+                option.value = season;
+                option.textContent = season + '년';
+                seasonFilter.appendChild(option);
+            });
+        }
+
+        function updateDependentFilters() {
+            const seasonFilter = document.getElementById('seasonFilter');
+            const roundFilter = document.getElementById('roundFilter');
+            const genderFilter = document.getElementById('genderFilter');
+            
+            const selectedSeason = seasonFilter.value;
+
+            const currentRound = roundFilter.value;
+            const currentGender = genderFilter.value;
+
+            roundFilter.innerHTML = '<option value="">모든 라운드</option>';
+            genderFilter.innerHTML = '<option value="">모든 성별</option>';
+
+            const relevantTournaments = selectedSeason 
+                ? tournaments.filter(t => t.season == selectedSeason)
+                : tournaments;
+            
+            const rounds = new Set(relevantTournaments.map(t => t.round));
+            Array.from(rounds).sort().forEach(round => {
+                roundFilter.add(new Option(round, round));
+            });
+
+            const genders = new Set(relevantTournaments.map(t => t.gender));
+            if (genders.has('male')) {
+                genderFilter.add(new Option('남자', 'male'));
+            }
+            if (genders.has('female')) {
+                genderFilter.add(new Option('여자', 'female'));
+            }
+
+            if (Array.from(roundFilter.options).some(opt => opt.value === currentRound)) {
+                roundFilter.value = currentRound;
+            }
+            if (Array.from(genderFilter.options).some(opt => opt.value === currentGender)) {
+                genderFilter.value = currentGender;
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('seasonFilter').addEventListener('change', () => {
+                updateDependentFilters();
+                render();
+            });
+            document.getElementById('roundFilter').addEventListener('change', render);
+            document.getElementById('genderFilter').addEventListener('change', render);
+        }
+
+        function resetFilters() {
+            document.getElementById('seasonFilter').value = '';
+            updateDependentFilters();
+            document.getElementById('roundFilter').value = '';
+            document.getElementById('genderFilter').value = '';
+            render();
+        }
+
+        function render() {
+            const rankedTeams = getFilteredAndRankedTeams();
+            renderTable(rankedTeams);
+        }
+
+        function getFilteredAndRankedTeams() {
+            // 필터 값 가져오기
+            const seasonFilter = document.getElementById('seasonFilter').value;
+            const roundFilter = document.getElementById('roundFilter').value;
+            const genderFilter = document.getElementById('genderFilter').value;
+
+            console.log('Filters:', { seasonFilter, roundFilter, genderFilter });
+            console.log('Available tournaments:', tournaments.length);
+            console.log('Available matches:', matches.length);
+            console.log('Available stats:', stats.length);
+
+            // 1. Filter tournaments
+            const selectedTournaments = tournaments.filter(t => 
+                (!seasonFilter || t.season == seasonFilter) &&
+                (!roundFilter || t.round === roundFilter) &&
+                (!genderFilter || t.gender === genderFilter)
+            );
+            const selectedTournamentIds = selectedTournaments.map(t => t.id);
+            console.log('Selected tournaments:', selectedTournaments.length, selectedTournamentIds);
+
+            // 2. Filter matches based on selected tournaments
+            const filteredMatchIds = matches.filter(m => selectedTournamentIds.includes(m.tournament_id)).map(m => m.id);
+            console.log('Filtered match IDs:', filteredMatchIds.length, filteredMatchIds.slice(0, 10));
+
+            // 3. Filter stats by relevant matches
+            const relevantStats = stats.filter(s => filteredMatchIds.includes(s.match_id));
+            console.log('Relevant stats:', relevantStats.length);
+
+            // 4. Aggregate stats by team
+            const teamStats = {};
+            relevantStats.forEach(stat => {
+                const player = players.find(p => p.id === stat.player_id);
+                const teamId = player.team_id;
+                const team = teams.find(t => t.id === teamId);
+                
+                if (!teamStats[teamId]) {
+                    teamStats[teamId] = {
+                        team_id: teamId,
+                        team_name: team.name,
+                        school_level: team.school_level,
+                        games_played: 0,
+                        total_points: 0,
+                        total_blocks: 0,
+                        total_aces: 0,
+                    };
+                }
+                const teamData = teamStats[teamId];
+                teamData.games_played++; // This is a simplification, should be based on matches played
+                teamData.total_points += stat.points;
+                teamData.total_blocks += stat.blocks;
+                teamData.total_aces += stat.aces;
+            });
+
+            // 5. Calculate averages and rank
+            let finalData = Object.values(teamStats).map(t => ({
+                ...t,
+                avg_points: t.games_played > 0 ? (t.total_points / t.games_played).toFixed(2) : '0.00',
+                avg_blocks: t.games_played > 0 ? (t.total_blocks / t.games_played).toFixed(2) : '0.00',
+                avg_aces: t.games_played > 0 ? (t.total_aces / t.games_played).toFixed(2) : '0.00',
+            }));
+
+            finalData.sort((a, b) => parseFloat(b.avg_points) - parseFloat(a.avg_points));
+            
+            console.log('Final data:', finalData.length, finalData.slice(0, 3));
+            return finalData;
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('team-ranking-body');
+            tbody.innerHTML = data.map((team, index) => `
+                <tr>
+                    <td class="rank">${index + 1}</td>
+                    <td class="team-name">${team.team_name}</td>
+                    <td>${team.games_played}</td>
+                    <td>${team.avg_points}</td>
+                    <td>${team.avg_blocks}</td>
+                    <td>${team.avg_aces}</td>
+                </tr>
+            `).join('');
+        }
+
+
+
+    </script>
 </body>
 </html>
