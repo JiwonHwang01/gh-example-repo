@@ -53,12 +53,6 @@
                             <select id="roundFilter">
                                 <option value="">라운드 선택</option>
                             </select>
-                            <select id="seasonFilter2">
-                                <option value="">시즌 선택</option>
-                            </select>
-                            <select id="roundFilter2">
-                                <option value="">라운드 선택</option>
-                            </select>
                             <select id="sortFilter">
                                 <option value="points">득점</option>
                                 <option value="attack">공격</option>
@@ -279,24 +273,18 @@
         function populateFilters() {
             // 시즌 필터 채우기
             const seasons = [...new Set(tournaments.map(t => t.season))];
-            const seasonFilters = ['seasonFilter', 'seasonFilter2'];
-            seasonFilters.forEach(id => {
-                const filter = document.getElementById(id);
-                filter.innerHTML = '<option value="">시즌 선택</option>';
-                seasons.sort((a, b) => b - a).forEach(s => {
-                    filter.innerHTML += `<option value="${s}">${s}년</option>`;
-                });
+            const seasonFilter = document.getElementById('seasonFilter');
+            seasonFilter.innerHTML = '<option value="">시즌 선택</option>';
+            seasons.sort((a, b) => b - a).forEach(s => {
+                seasonFilter.innerHTML += `<option value="${s}">${s}년</option>`;
             });
 
             // 라운드 필터 채우기
             const rounds = [...new Set(tournaments.map(t => t.round))];
-            const roundFilters = ['roundFilter', 'roundFilter2'];
-            roundFilters.forEach(id => {
-                const filter = document.getElementById(id);
-                filter.innerHTML = '<option value="">라운드 선택</option>';
-                rounds.sort().forEach(r => {
-                    filter.innerHTML += `<option value="${r}">${r}</option>`;
-                });
+            const roundFilter = document.getElementById('roundFilter');
+            roundFilter.innerHTML = '<option value="">라운드 선택</option>';
+            rounds.sort().forEach(r => {
+                roundFilter.innerHTML += `<option value="${r}">${r}</option>`;
             });
         }
 
@@ -313,7 +301,7 @@
             
             // 초기화 버튼
             document.getElementById('resetFilters').addEventListener('click', () => {
-                document.querySelectorAll('#playerSearch, #seasonFilter, #roundFilter, #seasonFilter2, #roundFilter2, #sortFilter').forEach(el => el.value = '');
+                document.querySelectorAll('#playerSearch, #seasonFilter, #roundFilter, #sortFilter').forEach(el => el.value = '');
                 document.getElementById('playersTableBody').innerHTML = '<tr><td colspan="11" style="text-align: center;">검색 조건을 설정하고 검색하기 버튼을 눌러주세요.</td></tr>';
                 document.getElementById('filteredPlayers').textContent = '0';
             });
@@ -355,14 +343,18 @@
                        .map(m => m.id)
             );
 
-            // 선수 데이터 필터링
-            filteredData = processedPlayersData.filter(player => {
-                const hasStatsInFilter = player_match_stats.some(s => 
-                    s.player_id === player.id && relevantMatchIds.has(s.match_id)
-                );
-                const matchesSearch = player.name.toLowerCase().includes(searchTerm);
-                return hasStatsInFilter && player.games > 0 && matchesSearch;
-            });
+            // 선수 데이터 필터링 - 필터가 없으면 모든 데이터 표시
+            if (!season && !round && !searchTerm) {
+                filteredData = processedPlayersData.filter(player => player.games > 0);
+            } else {
+                filteredData = processedPlayersData.filter(player => {
+                    const hasStatsInFilter = player_match_stats.some(s => 
+                        s.player_id === player.id && relevantMatchIds.has(s.match_id)
+                    );
+                    const matchesSearch = player.name.toLowerCase().includes(searchTerm);
+                    return hasStatsInFilter && player.games > 0 && matchesSearch;
+                });
+            }
 
             // 정렬 기준 설정
             const sortMap = {
