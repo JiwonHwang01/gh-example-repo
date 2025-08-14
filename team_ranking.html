@@ -6,240 +6,7 @@
     <title>팀 순위 - 중고등 배구 데이터</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Noto Sans KR', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-        }
-
-        /* Header */
-        .header {
-            background-color: #667eea;
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .logo i {
-            font-size: 2rem;
-            color: #ffd700;
-        }
-
-        .nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: #ffd700;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Page Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-header h1 i {
-            color: #667eea;
-            margin-right: 0.5rem;
-        }
-
-        .page-header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        /* 검색 섹션 */
-        .search-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .search-controls {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .filter-group select {
-            padding: 0.8rem 1rem;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1rem;
-            background: white;
-        }
-
-        /* 버튼 스타일 */
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-outline:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        /* Table */
-        .table-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        .ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .ranking-table th, .ranking-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .ranking-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .rank {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #667eea;
-            text-align: center;
-        }
-
-        .team-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* 반응형 디자인 */
-        @media screen and (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .nav {
-                gap: 1rem;
-            }
-            
-            .hide-on-mobile {
-                display: none;
-            }
-
-            .filter-group {
-                align-items: stretch;
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .filter-group select {
-                width: 100%;
-                min-width: auto;
-            }
-            
-            .search-controls {
-                align-items: stretch;
-                flex-direction: column;
-            }
-        }
-
-        .footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-top: 3rem;
-        }
-
-        .footer-content p {
-            margin: 0.5rem 0;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header">
@@ -280,8 +47,15 @@
                         <option value="">성별 선택</option>
                         <!-- 동적으로 생성 -->
                     </select>
-                    <button class="btn btn-outline" onclick="resetFilters()">
+                    <select id="schoolLevelFilter">
+                        <option value="">중고등 선택</option>
+                        <!-- 동적으로 생성 -->
+                    </select>
+                    <button class="btn btn-outline" id="resetFilters">
                         <i class="fas fa-undo"></i> 초기화
+                    </button>
+                    <button class="btn btn-secondary" id="searchButton">
+                        <i class="fas fa-search"></i> 검색하기
                     </button>
                 </div>
             </div>
@@ -295,9 +69,10 @@
                             <th>순위</th>
                             <th>학교</th>
                             <th>경기 수</th>
-                            <th>평균 득점</th>
-                            <th class="hide-on-mobile">평균 블록</th>
-                            <th class="hide-on-mobile">평균 서브</th>
+                            <th>승</th>
+                            <th>패</th>
+                            <th class="hide-on-mobile">세트 승</th>
+                            <th class="hide-on-mobile">세트 패</th>
                         </tr>
                     </thead>
                     <tbody id="team-ranking-body"></tbody>
@@ -313,172 +88,139 @@
         </div>
     </footer>
 
-    <script src="data.js"></script>
+        <script src="data.js"></script>
     <script>
-        // --- Render Logic ---
-
         document.addEventListener('DOMContentLoaded', () => {
-            populateSeasonFilter();
-            updateDependentFilters();
-            render();
-            setupEventListeners();
+            populateFilters();
+            
+            // 초기에는 결과를 숨김
+            document.getElementById('team-ranking-body').innerHTML = '<tr><td colspan="7" style="text-align:center;">검색 조건을 설정하고 검색하기 버튼을 눌러주세요.</td></tr>';
+            
+            // 검색 버튼 이벤트 리스너
+            document.getElementById('searchButton').addEventListener('click', renderRankings);
+            
+            // 초기화 버튼
+            document.getElementById('resetFilters').addEventListener('click', () => {
+                document.getElementById('seasonFilter').value = '';
+                document.getElementById('roundFilter').value = '';
+                document.getElementById('genderFilter').value = '';
+                document.getElementById('schoolLevelFilter').value = '';
+                document.getElementById('team-ranking-body').innerHTML = '<tr><td colspan="7" style="text-align:center;">검색 조건을 설정하고 검색하기 버튼을 눌러주세요.</td></tr>';
+            });
         });
 
-        function populateSeasonFilter() {
-            const seasons = new Set(tournaments.map(t => t.season));
+        function populateFilters() {
+            const seasons = [...new Set(tournaments.map(t => t.season))];
+            const rounds = [...new Set(tournaments.map(t => t.round))];
+            const genders = [...new Set(tournaments.map(t => t.gender))];
+
             const seasonFilter = document.getElementById('seasonFilter');
-            
-            Array.from(seasons).sort().forEach(season => {
-                const option = document.createElement('option');
-                option.value = season;
-                option.textContent = season + '년';
-                seasonFilter.appendChild(option);
+            seasons.sort((a, b) => b - a).forEach(season => {
+                seasonFilter.add(new Option(`${season}년`, season));
             });
-        }
 
-        function updateDependentFilters() {
-            const seasonFilter = document.getElementById('seasonFilter');
             const roundFilter = document.getElementById('roundFilter');
-            const genderFilter = document.getElementById('genderFilter');
-            
-            const selectedSeason = seasonFilter.value;
-
-            const currentRound = roundFilter.value;
-            const currentGender = genderFilter.value;
-
-            roundFilter.innerHTML = '<option value="">모든 라운드</option>';
-            genderFilter.innerHTML = '<option value="">모든 성별</option>';
-
-            const relevantTournaments = selectedSeason 
-                ? tournaments.filter(t => t.season == selectedSeason)
-                : tournaments;
-            
-            const rounds = new Set(relevantTournaments.map(t => t.round));
-            Array.from(rounds).sort().forEach(round => {
+            rounds.forEach(round => {
                 roundFilter.add(new Option(round, round));
             });
 
-            const genders = new Set(relevantTournaments.map(t => t.gender));
-            if (genders.has('male')) {
-                genderFilter.add(new Option('남자', 'male'));
-            }
-            if (genders.has('female')) {
-                genderFilter.add(new Option('여자', 'female'));
-            }
-
-            if (Array.from(roundFilter.options).some(opt => opt.value === currentRound)) {
-                roundFilter.value = currentRound;
-            }
-            if (Array.from(genderFilter.options).some(opt => opt.value === currentGender)) {
-                genderFilter.value = currentGender;
-            }
-        }
-
-        function setupEventListeners() {
-            document.getElementById('seasonFilter').addEventListener('change', () => {
-                updateDependentFilters();
-                render();
+            const genderFilter = document.getElementById('genderFilter');
+            genders.forEach(gender => {
+                genderFilter.add(new Option(gender === 'male' ? '남자' : '여자', gender));
             });
-            document.getElementById('roundFilter').addEventListener('change', render);
-            document.getElementById('genderFilter').addEventListener('change', render);
         }
 
-        function resetFilters() {
-            document.getElementById('seasonFilter').value = '';
-            updateDependentFilters();
-            document.getElementById('roundFilter').value = '';
-            document.getElementById('genderFilter').value = '';
-            render();
-        }
+        function renderRankings() {
+            const season = document.getElementById('seasonFilter').value;
+            const round = document.getElementById('roundFilter').value;
+            const gender = document.getElementById('genderFilter').value;
+            const schoolLevel = document.getElementById('schoolLevelFilter').value;
 
-        function render() {
-            const rankedTeams = getFilteredAndRankedTeams();
-            renderTable(rankedTeams);
-        }
-
-        function getFilteredAndRankedTeams() {
-            // 필터 값 가져오기
-            const seasonFilter = document.getElementById('seasonFilter').value;
-            const roundFilter = document.getElementById('roundFilter').value;
-            const genderFilter = document.getElementById('genderFilter').value;
-
-            console.log('Filters:', { seasonFilter, roundFilter, genderFilter });
-            console.log('Available tournaments:', tournaments.length);
-            console.log('Available matches:', matches.length);
-            console.log('Available stats:', stats.length);
-
-            // 1. Filter tournaments
-            const selectedTournaments = tournaments.filter(t => 
-                (!seasonFilter || t.season == seasonFilter) &&
-                (!roundFilter || t.round === roundFilter) &&
-                (!genderFilter || t.gender === genderFilter)
+            const filteredTournaments = tournaments.filter(t => 
+                (!season || t.season == season) &&
+                (!round || t.round === round) &&
+                (!gender || t.gender === gender) &&
+                (!schoolLevel || t.school_level === schoolLevel)
             );
-            const selectedTournamentIds = selectedTournaments.map(t => t.id);
-            console.log('Selected tournaments:', selectedTournaments.length, selectedTournamentIds);
+            const tournamentIds = filteredTournaments.map(t => t.id);
 
-            // 2. Filter matches based on selected tournaments
-            const filteredMatchIds = matches.filter(m => selectedTournamentIds.includes(m.tournament_id)).map(m => m.id);
-            console.log('Filtered match IDs:', filteredMatchIds.length, filteredMatchIds.slice(0, 10));
+            const filteredMatches = matches.filter(m => tournamentIds.includes(m.tournaments_id) && m.status === '종료');
 
-            // 3. Filter stats by relevant matches
-            const relevantStats = stats.filter(s => filteredMatchIds.includes(s.match_id));
-            console.log('Relevant stats:', relevantStats.length);
-
-            // 4. Aggregate stats by team
             const teamStats = {};
-            relevantStats.forEach(stat => {
-                const player = players.find(p => p.id === stat.player_id);
-                const teamId = player.team_id;
-                const team = teams.find(t => t.id === teamId);
-                
-                if (!teamStats[teamId]) {
-                    teamStats[teamId] = {
-                        team_id: teamId,
-                        team_name: team.name,
-                        school_level: team.school_level,
-                        games_played: 0,
-                        total_points: 0,
-                        total_blocks: 0,
-                        total_aces: 0,
+            teams.forEach(team => {
+                if (!schoolLevel || team.school_level === schoolLevel) {
+                    teamStats[team.id] = {
+                        id: team.id,
+                        name: team.name,
+                        matchesPlayed: 0,
+                        wins: 0,
+                        losses: 0,
+                        setsWon: 0,
+                        setsLost: 0,
+                        pointsFor: 0,
+                        pointsAgainst: 0
                     };
                 }
-                const teamData = teamStats[teamId];
-                teamData.games_played++; // This is a simplification, should be based on matches played
-                teamData.total_points += stat.points;
-                teamData.total_blocks += stat.blocks;
-                teamData.total_aces += stat.aces;
             });
 
-            // 5. Calculate averages and rank
-            let finalData = Object.values(teamStats).map(t => ({
-                ...t,
-                avg_points: t.games_played > 0 ? (t.total_points / t.games_played).toFixed(2) : '0.00',
-                avg_blocks: t.games_played > 0 ? (t.total_blocks / t.games_played).toFixed(2) : '0.00',
-                avg_aces: t.games_played > 0 ? (t.total_aces / t.games_played).toFixed(2) : '0.00',
-            }));
+            filteredMatches.forEach(match => {
+                if (!teamStats[match.home_team_id] || !teamStats[match.away_team_id]) return;
 
-            finalData.sort((a, b) => parseFloat(b.avg_points) - parseFloat(a.avg_points));
-            
-            console.log('Final data:', finalData.length, finalData.slice(0, 3));
-            return finalData;
-        }
+                teamStats[match.home_team_id].matchesPlayed++;
+                teamStats[match.away_team_id].matchesPlayed++;
 
-        function renderTable(data) {
+                if (match.home_sets_won > match.away_sets_won) {
+                    teamStats[match.home_team_id].wins++;
+                    teamStats[match.away_team_id].losses++;
+                } else {
+                    teamStats[match.home_team_id].losses++;
+                    teamStats[match.away_team_id].wins++;
+                }
+
+                teamStats[match.home_team_id].setsWon += match.home_sets_won;
+                teamStats[match.home_team_id].setsLost += match.away_sets_won;
+                teamStats[match.away_team_id].setsWon += match.away_sets_won;
+                teamStats[match.away_team_id].setsLost += match.home_sets_won;
+
+                const matchSets = set_scores.filter(s => s.match_id === match.id);
+                matchSets.forEach(set => {
+                    teamStats[match.home_team_id].pointsFor += set.home_team_score;
+                    teamStats[match.home_team_id].pointsAgainst += set.away_team_score;
+                    teamStats[match.away_team_id].pointsFor += set.away_team_score;
+                    teamStats[match.away_team_id].pointsAgainst += set.home_team_score;
+                });
+            });
+
+            const rankedTeams = Object.values(teamStats)
+                .filter(team => team.matchesPlayed > 0)
+                .sort((a, b) => {
+                    if (b.wins !== a.wins) return b.wins - a.wins; // 1. 승수
+                    const setRatioA = a.setsLost === 0 ? a.setsWon : a.setsWon / a.setsLost;
+                    const setRatioB = b.setsLost === 0 ? b.setsWon : b.setsWon / b.setsLost;
+                    if (setRatioB !== setRatioA) return setRatioB - setRatioA; // 2. 세트 득실률
+                    const pointsRatioA = a.pointsAgainst === 0 ? a.pointsFor : a.pointsFor / a.pointsAgainst;
+                    const pointsRatioB = b.pointsAgainst === 0 ? b.pointsFor : b.pointsFor / b.pointsAgainst;
+                    return pointsRatioB - pointsRatioA; // 3. 점수 득실률
+                });
+
             const tbody = document.getElementById('team-ranking-body');
-            tbody.innerHTML = data.map((team, index) => `
+            if (rankedTeams.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">조건에 맞는 순위 정보가 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = rankedTeams.map((team, index) => `
                 <tr>
                     <td class="rank">${index + 1}</td>
-                    <td class="team-name">${team.team_name}</td>
-                    <td>${team.games_played}</td>
-                    <td>${team.avg_points}</td>
-                    <td class="hide-on-mobile">${team.avg_blocks}</td>
-                    <td class="hide-on-mobile">${team.avg_aces}</td>
+                    <td class="team-name">${team.name}</td>
+                    <td>${team.matchesPlayed}</td>
+                    <td>${team.wins}</td>
+                    <td>${team.losses}</td>
+                    <td class="hide-on_mobile">${team.setsWon}</td>
+                    <td class="hide-on_mobile">${team.setsLost}</td>
                 </tr>
             `).join('');
         }
-
-
-
     </script>
 </body>
 </html>
