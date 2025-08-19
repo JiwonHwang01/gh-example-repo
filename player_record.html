@@ -12,13 +12,16 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <i class="fas fa-volleyball-ball"></i>
-                <span>배구 연맹 데이터</span>
+                <a href="index.html" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-volleyball-ball"></i>
+                    <span>배구 연맹 데이터</span>
+                </a>
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link">홈</a>
+                <a href="index.html" class="nav-link hide-on-mobile">홈</a>
                 <a href="team_ranking.html" class="nav-link">팀 순위</a>
                 <a href="player_record.html" class="nav-link active">선수 기록</a>
+                <a href="match_results.html" class="nav-link">경기 결과</a>
                 <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
                 <a href="admin.html" class="nav-link admin-only-nav" style="display:none;">관리자</a>
             </nav>
@@ -117,32 +120,32 @@
                             <thead>
                                 <tr>
                                     <th>순서</th>
-                                    <th onclick="sortTable(1)">
-                                        선수 <i class="fas fa-chevron-down"></i>
+                                    <th>
+                                        선수</i>
                                     </th>
-                                    <th class="hide-on-mobile" onclick="sortTable(2)">
+                                    <th class="hide-on-mobile">
                                         포지션
                                     </th>
-                                    <th class="hide-on-mobile" onclick="sortTable(3)">
-                                        전체팀 <i class="fas fa-chevron-down"></i>
+                                    <th class="hide-on-mobile">
+                                        전체팀</i>
                                     </th>
                                     <th class="hide-on-mobile" onclick="sortTable(4)">
                                         경기수
                                     </th>
                                     <th class="hide-on-mobile" onclick="sortTable(5)">
-                                        세트수
+                                        세트수 <i class="fas fa-chevron-down"></i>
                                     </th>
                                     <th class="hide-on-mobile" onclick="sortTable(6)">
-                                        공격
+                                        공격 <i class="fas fa-chevron-down"></i>
                                     </th>
                                     <th class="hide-on-mobile" onclick="sortTable(7)">
-                                        블로킹
+                                        블로킹 <i class="fas fa-chevron-down"></i>
                                     </th>
                                     <th class="hide-on-mobile" onclick="sortTable(8)">
-                                        서브
+                                        서브 <i class="fas fa-chevron-down"></i>
                                     </th>
                                     <th class="hide-on-mobile" onclick="sortTable(9)">
-                                        득점
+                                        득점 <i class="fas fa-chevron-down"></i>
                                     </th>
                                     <th>상세</th>
                                 </tr>
@@ -180,8 +183,53 @@
                 </div>
                 
                 <div class="player-stats">
-                    <div class="stats-grid" id="modalStatsGrid">
-                        <!-- Stats will be populated here -->
+                    <div class="stats-tabs">
+                        <div class="tab-buttons">
+                            <button class="stats-tab-btn active" onclick="switchStatsTab('overview')">개요</button>
+                            <button class="stats-tab-btn" onclick="switchStatsTab('attack')">공격</button>
+                            <button class="stats-tab-btn" onclick="switchStatsTab('block')">블로킹</button>
+                            <button class="stats-tab-btn" onclick="switchStatsTab('receive')">리시브</button>
+                            <button class="stats-tab-btn" onclick="switchStatsTab('serve')">서브</button>
+                            <button class="stats-tab-btn" onclick="switchStatsTab('dig')">디그</button>
+                            <button class="stats-tab-btn" onclick="switchStatsTab('set')">세트</button>
+                        </div>
+                        <div class="stats-content">
+                            <div id="overview-tab" class="stats-tab active">
+                                <div class="stats-grid" id="overviewStatsGrid">
+                                    <!-- Overview stats will be populated here -->
+                                </div>
+                            </div>
+                            <div id="attack-tab" class="stats-tab">
+                                <div class="stats-grid" id="attackStatsGrid">
+                                    <!-- Attack stats will be populated here -->
+                                </div>
+                            </div>
+                            <div id="block-tab" class="stats-tab">
+                                <div class="stats-grid" id="blockStatsGrid">
+                                    <!-- Block stats will be populated here -->
+                                </div>
+                            </div>
+                            <div id="receive-tab" class="stats-tab">
+                                <div class="stats-grid" id="receiveStatsGrid">
+                                    <!-- Receive stats will be populated here -->
+                                </div>
+                            </div>
+                            <div id="serve-tab" class="stats-tab">
+                                <div class="stats-grid" id="serveStatsGrid">
+                                    <!-- Serve stats will be populated here -->
+                                </div>
+                            </div>
+                            <div id="dig-tab" class="stats-tab">
+                                <div class="stats-grid" id="digStatsGrid">
+                                    <!-- Dig stats will be populated here -->
+                                </div>
+                            </div>
+                            <div id="set-tab" class="stats-tab">
+                                <div class="stats-grid" id="setStatsGrid">
+                                    <!-- Set stats will be populated here -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -216,7 +264,7 @@
             populateFilters();
             setupEventListeners();
             // 초기에는 결과를 숨김
-            document.getElementById('playersTableBody').innerHTML = '<tr><td colspan="11" style="text-align: center;">검색 조건을 설정하고 검색하기 버튼을 눌러주세요.</td></tr>';
+            document.getElementById('playersTableBody').innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 2rem 1rem;">검색 후 결과를 확인하세요.</td></tr>';
         });
 
         function switchTab(gender) {
@@ -302,7 +350,7 @@
             // 초기화 버튼
             document.getElementById('resetFilters').addEventListener('click', () => {
                 document.querySelectorAll('#playerSearch, #seasonFilter, #roundFilter, #sortFilter').forEach(el => el.value = '');
-                document.getElementById('playersTableBody').innerHTML = '<tr><td colspan="11" style="text-align: center;">검색 조건을 설정하고 검색하기 버튼을 눌러주세요.</td></tr>';
+                document.getElementById('playersTableBody').innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 2rem 1rem;">검색 후 결과를 확인하세요.</td></tr>';
                 document.getElementById('filteredPlayers').textContent = '0';
             });
             
@@ -316,6 +364,16 @@
                 const modal = document.getElementById('playerModal');
                 if (event.target === modal) {
                     modal.style.display = 'none';
+                }
+            });
+            
+            // ESC 키로 모달 닫기
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const modal = document.getElementById('playerModal');
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                    }
                 }
             });
         }
@@ -516,9 +574,7 @@
             document.getElementById('modalPlayerSchool').textContent = player.team.name;
             document.getElementById('modalPlayerPosition').textContent = getPositionName(player.position);
             
-            const statsGrid = document.getElementById('modalStatsGrid');
-            statsGrid.innerHTML = ''; // Clear previous stats
-
+            // 통계 데이터 집계
             const aggregatedStats = playerStats.reduce((acc, stat) => {
                 acc.points += stat.points;
                 acc.games = (acc.games || new Set()).add(stat.match_id);
@@ -530,29 +586,187 @@
                 return acc;
             }, { points: 0 });
 
-            const statCategories = {
-                '득점': aggregatedStats.points,
-                '경기 수': aggregatedStats.games.size,
-                '공격 성공률': `${(aggregatedStats.attack_attempts > 0 ? (aggregatedStats.attack_successes / aggregatedStats.attack_attempts * 100) : 0).toFixed(1)}%`,
-                '블로킹': aggregatedStats.block_successes,
-                '서브': aggregatedStats.serve_aces,
-                '리시브 성공률': `${(aggregatedStats.receive_attempts > 0 ? (aggregatedStats.receive_successes / aggregatedStats.receive_attempts * 100) : 0).toFixed(1)}%`
-            };
+            // 성공률 계산
+            const attackSuccessRate = aggregatedStats.attack_attempts > 0 ? 
+                (aggregatedStats.attack_successes / aggregatedStats.attack_attempts * 100).toFixed(1) : '0.0';
+            const blockSuccessRate = aggregatedStats.block_attempts > 0 ? 
+                (aggregatedStats.block_successes / aggregatedStats.block_attempts * 100).toFixed(1) : '0.0';
+            const receiveSuccessRate = aggregatedStats.receive_attempts > 0 ? 
+                (aggregatedStats.receive_successes / aggregatedStats.receive_attempts * 100).toFixed(1) : '0.0';
+            const serveSuccessRate = aggregatedStats.serve_attempts > 0 ? 
+                (aggregatedStats.serve_aces / aggregatedStats.serve_attempts * 100).toFixed(1) : '0.0';
+            const digSuccessRate = aggregatedStats.dig_attempts > 0 ? 
+                (aggregatedStats.dig_successes / aggregatedStats.dig_attempts * 100).toFixed(1) : '0.0';
+            const setSuccessRate = aggregatedStats.set_attempts > 0 ? 
+                (aggregatedStats.set_successes / aggregatedStats.set_attempts * 100).toFixed(1) : '0.0';
 
-            for(const [title, value] of Object.entries(statCategories)) {
-                statsGrid.innerHTML += `
-                    <div class="stat-item">
-                        <div class="stat-title">${title}</div>
-                        <div class="stat-value">${value}</div>
-                    </div>
-                `;
-            }
+            // 개요 탭 (핵심 지표)
+            const overviewGrid = document.getElementById('overviewStatsGrid');
+            overviewGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-title">총 득점</div>
+                    <div class="stat-value">${aggregatedStats.points}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">경기 수</div>
+                    <div class="stat-value">${aggregatedStats.games.size}</div>
+                </div>
+                
+            `;
+
+            // 공격 탭
+            const attackGrid = document.getElementById('attackStatsGrid');
+            const attackFails = aggregatedStats.attack_attempts - aggregatedStats.attack_successes;
+            attackGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-title">시도</div>
+                    <div class="stat-value">${aggregatedStats.attack_attempts}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공</div>
+                    <div class="stat-value">${aggregatedStats.attack_successes}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">실패</div>
+                    <div class="stat-value">${attackFails}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공률</div>
+                    <div class="stat-value">${attackSuccessRate}%</div>
+                </div>
+            `;
+
+            // 블로킹 탭
+            const blockGrid = document.getElementById('blockStatsGrid');
+            const blockFails = aggregatedStats.block_attempts - aggregatedStats.block_successes;
+            blockGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-title">시도</div>
+                    <div class="stat-value">${aggregatedStats.block_attempts}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공</div>
+                    <div class="stat-value">${aggregatedStats.block_successes}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">실패</div>
+                    <div class="stat-value">${blockFails}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공률</div>
+                    <div class="stat-value">${blockSuccessRate}%</div>
+                </div>
+            `;
+
+            // 리시브 탭
+            const receiveGrid = document.getElementById('receiveStatsGrid');
+            const receiveFails = aggregatedStats.receive_attempts - aggregatedStats.receive_successes;
+            receiveGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-title">시도</div>
+                    <div class="stat-value">${aggregatedStats.receive_attempts}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공</div>
+                    <div class="stat-value">${aggregatedStats.receive_successes}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">실패</div>
+                    <div class="stat-value">${receiveFails}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공률</div>
+                    <div class="stat-value">${receiveSuccessRate}%</div>
+                </div>
+            `;
+
+            // 서브 탭
+            const serveGrid = document.getElementById('serveStatsGrid');
+            const serveFails = aggregatedStats.serve_attempts - aggregatedStats.serve_aces;
+            serveGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-title">시도</div>
+                    <div class="stat-value">${aggregatedStats.serve_attempts}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공</div>
+                    <div class="stat-value">${aggregatedStats.serve_aces}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">실패</div>
+                    <div class="stat-value">${serveFails}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공률</div>
+                    <div class="stat-value">${serveSuccessRate}%</div>
+                </div>
+            `;
+
+            // 디그 탭
+            const digGrid = document.getElementById('digStatsGrid');
+            const digFails = aggregatedStats.dig_attempts - aggregatedStats.dig_successes;
+            digGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-title">시도</div>
+                    <div class="stat-value">${aggregatedStats.dig_attempts}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공</div>
+                    <div class="stat-value">${aggregatedStats.dig_successes}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">실패</div>
+                    <div class="stat-value">${digFails}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공률</div>
+                    <div class="stat-value">${digSuccessRate}%</div>
+                </div>
+            `;
+
+            // 세트 탭
+            const setGrid = document.getElementById('setStatsGrid');
+            const setFails = aggregatedStats.set_attempts - aggregatedStats.set_successes;
+            setGrid.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-title">시도</div>
+                    <div class="stat-value">${aggregatedStats.set_attempts}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공</div>
+                    <div class="stat-value">${aggregatedStats.set_successes}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">실패</div>
+                    <div class="stat-value">${setFails}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">성공률</div>
+                    <div class="stat-value">${setSuccessRate}%</div>
+                </div>
+            `;
 
             const recentGamesContainer = document.getElementById('recentGames');
-            recentGamesContainer.innerHTML = playerStats.map(stat => {
+            // 최근 5경기만 표시하고 상대팀명과 승패만 표시
+            const recentGames = playerStats
+                .sort((a, b) => {
+                    const matchA = matches.find(m => m.id === a.match_id);
+                    const matchB = matches.find(m => m.id === b.match_id);
+                    return new Date(matchB.date) - new Date(matchA.date);
+                })
+                .slice(0, 5);
+
+            recentGamesContainer.innerHTML = recentGames.map(stat => {
                 const match = matches.find(m => m.id === stat.match_id);
                 const opponent = teams.find(t => t.id === (match.home_team_id === player.team_id ? match.away_team_id : match.home_team_id));
-                return `<div class="game-item">vs. ${opponent.name} - 득점: ${stat.points}, 블록: ${stat.block_successes}, 서브에이스: ${stat.serve_aces}</div>`;
+                
+                // 승패 판정 (간단한 로직 - 실제로는 더 복잡할 수 있음)
+                const isHome = match.home_team_id === player.team_id;
+                const result = isHome ? 
+                    (match.home_score > match.away_score ? '승' : '패') :
+                    (match.away_score > match.home_score ? '승' : '패');
+                
+                return `<div class="game-item">vs. ${opponent.name} - ${result}</div>`;
             }).join('') || '<p>경기 기록이 없습니다.</p>';
 
             document.getElementById('playerModal').style.display = 'block';
@@ -576,6 +790,24 @@
         function getPositionName(position) {
             const positions = { setter: "세터", outside: "아웃사이드 히터", middle: "미들 블로커", opposite: "오포지트", libero: "리베로" };
             return positions[position] || position;
+        }
+
+        function switchStatsTab(tabName) {
+            // 모든 탭 버튼에서 active 클래스 제거
+            document.querySelectorAll('.stats-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 모든 탭 콘텐츠 숨기기
+            document.querySelectorAll('.stats-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 클릭된 탭 버튼에 active 클래스 추가
+            document.querySelector(`[onclick="switchStatsTab('${tabName}')"]`).classList.add('active');
+            
+            // 해당 탭 콘텐츠 보이기
+            document.getElementById(`${tabName}-tab`).classList.add('active');
         }
 
         function exportData() {

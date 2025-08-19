@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경기 결과 - 중고등 배구 데이터</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .match-list-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: box-shadow 0.3s;
+        }
+        
+        @media screen and (max-width: 768px) {
+            
+        }
+        .match-list-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .match-details-section {
+            display: none;
+            margin-top: 2rem;
+        }
+        .match-detail-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .stat-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .stat-table th, .stat-table td {
+            border: 1px solid #e9ecef;
+            padding: 0.8rem;
+            text-align: center;
+        }
+        .stat-table th {
+            background-color: #f8f9fa;
+        }
+        .set-played {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Match Detail Modal Styles */
+        .match-detail-modal {
+            padding: 2rem;
+        }
+        .match-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .match-header h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .match-header h2 {
+            font-size: 1.5rem;
+            color: #666;
+            font-weight: 600;
+        }
+        .match-scorecard {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* 새로운 그리드 구조 */
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .team-card {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .team-status {
+            background: #6c757d;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .team-status.win {
+            background: #28a745;
+        }
+        
+        .team-status.lose {
+            background: #dc3545;
+        }
+        
+        .team-logo-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .team-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .team-score {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            margin: 0.5rem 0;
+        }
+        
+        .match-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+        
+        .score-table-container {
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+        
+        .score-table th,
+        .score-table td {
+            border: 1px solid #dee2e6;
+            padding: 0.8rem 0.3rem;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .score-table th {
+            background: #667eea;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .score-table th:first-child,
+        .score-table td:first-child {
+            min-width: 120px;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .score-table th:first-child {
+            background: #667eea;
+            z-index: 2;
+        }
+        
+        .score-table th:not(:first-child),
+        .score-table td:not(:first-child) {
+            min-width: 80px;
+        }
+        
+        .score-table th:last-child {
+            min-width: 120px;
+        }
+        
+        .score-table td:last-child {
+            min-width: 120px;
+        }
+        
+        .score-table th:not(:first-child):not(:last-child),
+        .score-table td:not(:first-child):not(:last-child) {
+            min-width: 80px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .match-detail-modal {
+                padding: 0;
+                padding-top: 3rem;
+            }
+            
+            .match-scorecard {
+                padding: 0;
+            }
+            
+            .match-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            
+            .team-logo-placeholder {
+                width: 60px;
+                height: 60px;
+                font-size: 1rem;
+            }
+            
+            .score-table-container {
+                margin-top: 1rem;
+            }
+            
+            .score-table {
+                min-width: 600px;
+            }
+            
+            .score-table th,
+            .score-table td {
+                padding: 0.6rem 0.2rem;
+                font-size: 0.8rem;
+            }
+            
+            .score-table th:first-child {
+                background: #667eea;
+            }
+            
+            .score-table tr.winner td:first-child {
+                background: #f8f9ff;
+            }
+            
+            .score-table tr.loser td:first-child {
+                background: #fff8f8;
+            }
+            
+            .match-header h1 {
+                font-size: 1.2rem;
+            }
+            .match-list-item {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+                text-align: center;
+            }
+            .match-list-item > div {
+                width: 100%;
+            }
+        }
+        .match-date {
+            text-align: center;
+            font-size: 1.0rem;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 2rem;
+        }
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+        .score-table th,
+        .score-table td {
+            border: 1px solid #dee2e6;
+            padding: 0.8rem 0.3rem;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .score-table th {
+            background: #667eea;
+            color: white;
+            font-size: 0.9rem;
+        }
+        .score-table tr.winner {
+            background: #f8f9ff;
+        }
+        .score-table tr.loser {
+            background: #fff8f8;
+        }
+        .team-label {
+            background: #fff;
+            color: #333;
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .team-score {
+            background: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+            font-size: 2rem;
+        }
+        .team-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        .set-score {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .total-score {
+            background: #f8f9fa;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-volleyball-ball"></i>
+                    <span>배구 연맹 데이터</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link hide-on-mobile">홈</a>
+                <a href="team_ranking.html" class="nav-link">팀 순위</a>
+                <a href="player_record.html" class="nav-link">선수 기록</a>
+                <a href="match_results.html" class="nav-link active">경기 결과</a>
+                <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
+                <a href="admin.html" class="nav-link admin-only-nav" style="display:none;">관리자</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-list-alt"></i> 경기 결과</h1>
+            <p>대회, 시즌별로 필터링하여 경기 결과를 확인하세요.</p>
+        </div>
+
+        <!-- 탭 컨테이너 -->
+        <div class="tab-container">
+            <div class="tab-header">
+                <button class="tab-button active" onclick="switchTab('male')">남자부</button>
+                <button class="tab-button" onclick="switchTab('female')">여자부</button>
+            </div>
+            <div class="tab-content">
+                <!-- 검색 및 필터 -->
+                <div class="search-section">
+                    <div class="search-controls">
+                        <div class="filter-group">                    
+                            <select id="seasonFilter">
+                                <option value="">시즌 선택</option>
+                            </select>
+                            <select id="roundFilter">
+                                <option value="">라운드 선택</option>
+                            </select>
+                            <button class="btn btn-outline" id="resetFilters">
+                                <i class="fas fa-undo"></i> 초기화
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="matchList" class="match-list-container">
+                    <!-- 경기 목록이 여기에 동적으로 생성됩니다. -->
+                </div>
+            </div>
+        </div>
+
+        <div id="matchList" class="match-list-container">
+            <!-- 경기 목록이 여기에 동적으로 생성됩니다. -->
+        </div>
+
+    </div>
+
+    <!-- 경기 상세 모달 -->
+    <div id="matchModal" class="modal">
+        <div class="modal-content extra-large">
+            <span class="close">&times;</span>
+            <div id="matchModalContent">
+                <!-- 경기 상세 정보가 여기에 동적으로 생성됩니다. -->
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Korea University Volleyball Federation (KUVF). All rights reserved.</p>
+            <p>Developer Contact: kuvf.dev@gmail.com (문의)</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script>
+        let currentGender = 'male';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateFilters();
+            renderMatchList();
+            
+            document.getElementById('seasonFilter').addEventListener('change', renderMatchList);
+            document.getElementById('roundFilter').addEventListener('change', renderMatchList);
+            document.getElementById('resetFilters').addEventListener('click', () => {
+                document.getElementById('seasonFilter').value = '';
+                document.getElementById('roundFilter').value = '';
+                renderMatchList();
+            });
+
+            // 모달 닫기 버튼 이벤트 리스너
+            document.querySelector('.close').addEventListener('click', function() {
+                document.getElementById('matchModal').style.display = 'none';
+            });
+            
+            // 모달 외부 클릭시 닫기
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('matchModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // ESC 키로 모달 닫기
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const modal = document.getElementById('matchModal');
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        function switchTab(gender) {
+            currentGender = gender;
+            
+            // 탭 버튼 스타일 변경
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 데이터 필터링 및 렌더링
+            renderMatchList();
+        }
+
+        function populateFilters() {
+            const seasons = [...new Set(tournaments.map(t => t.season))];
+            const rounds = [...new Set(tournaments.map(t => t.round))];
+
+            const seasonFilter = document.getElementById('seasonFilter');
+            seasons.sort((a, b) => b - a).forEach(season => {
+                seasonFilter.add(new Option(`${season}년`, season));
+            });
+
+            const roundFilter = document.getElementById('roundFilter');
+            rounds.forEach(round => {
+                roundFilter.add(new Option(round, round));
+            });
+        }
+
+        function renderMatchList() {
+            const season = document.getElementById('seasonFilter').value;
+            const round = document.getElementById('roundFilter').value;
+
+            const filteredTournaments = tournaments.filter(t => 
+                t.gender === currentGender &&
+                (!season || t.season == season) &&
+                (!round || t.round === round)
+            );
+            const tournamentIds = filteredTournaments.map(t => t.id);
+
+            const filteredMatches = matches
+                .filter(m => tournamentIds.includes(m.tournaments_id))
+                .sort((a, b) => new Date(b.match_date) - new Date(a.match_date));
+
+            const matchListContainer = document.getElementById('matchList');
+            if (filteredMatches.length === 0) {
+                matchListContainer.innerHTML = '<p style="text-align:center;">조건에 맞는 경기 결과가 없습니다.</p>';
+                return;
+            }
+
+            matchListContainer.innerHTML = filteredMatches.map(match => {
+                const homeTeam = teams.find(t => t.id === match.home_team_id);
+                const awayTeam = teams.find(t => t.id === match.away_team_id);
+                const tournament = tournaments.find(t => t.id === match.tournaments_id);
+                
+                // datetime에서 초 단위 제외
+                const matchDate = new Date(match.match_date);
+                const formattedDate = matchDate.toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long'
+                }) + ' ' + matchDate.toLocaleTimeString('ko-KR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                return `
+                    <div class="match-list-item">
+                        <div>
+                            <strong>${tournament.name}</strong><br>
+                            <small>${formattedDate}</small>
+                        </div>
+                        <div>
+                            <span>${homeTeam.name}</span> <strong>${match.home_sets_won}</strong> vs <strong>${match.away_sets_won}</strong> <span>${awayTeam.name}</span>
+                        </div>
+                        <button class="btn btn-outline" onclick="showMatchDetails(${match.id})">상세 보기</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showMatchDetails(matchId) {
+            const match = matches.find(m => m.id === matchId);
+            if (!match) return;
+
+            const homeTeam = teams.find(t => t.id === match.home_team_id);
+            const awayTeam = teams.find(t => t.id === match.away_team_id);
+            const tournament = tournaments.find(t => t.id === match.tournaments_id);
+            const sets = set_scores.filter(s => s.match_id === matchId).sort((a,b) => a.set_number - b.set_number);
+            
+            let totalHomeScore = 0;
+            let totalAwayScore = 0;
+            sets.forEach(set => {
+                totalHomeScore += set.home_team_score;
+                totalAwayScore += set.away_team_score;
+            });
+
+            // 승패 판정
+            const homeWon = match.home_sets_won > match.away_sets_won;
+            const awayWon = match.away_sets_won > match.home_sets_won;
+
+            // 날짜 포맷팅
+            const matchDate = new Date(match.match_date);
+            const formattedDate = matchDate.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+
+            const modalContent = document.getElementById('matchModalContent');
+            modalContent.innerHTML = `
+                <div class="match-detail-modal">
+                    <div class="match-header">
+                        <h1>${tournament.name}</h1>
+                        <div class="match-date">${formattedDate}</div>
+                        <h2>상세결과</h2>
+                    </div>
+                    
+                    <div class="match-scorecard">
+                        <div class="match-grid">
+                            <div class="team-card">
+                                <div class="team-status ${homeWon ? 'win' : 'lose'}">${homeWon ? 'W' : 'L'}</div>
+                                <div class="team-logo-placeholder">${homeTeam.name.charAt(0)}</div>
+                                <div class="team-name">${homeTeam.name}</div>
+                                <div class="team-score">${match.home_sets_won}</div>
+                            </div>
+                            
+                            <div class="team-card">
+                                <div class="team-status ${awayWon ? 'win' : 'lose'}">${awayWon ? 'W' : 'L'}</div>
+                                <div class="team-logo-placeholder">${awayTeam.name.charAt(0)}</div>
+                                <div class="team-name">${awayTeam.name}</div>
+                                <div class="team-score">${match.away_sets_won}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="score-table-container">
+                            <table class="score-table">
+                                <thead>
+                                    <tr>
+                                        <th>${currentGender === 'male' ? '남자부' : '여자부'}</th>
+                                        <th>1SET</th>
+                                        <th>2SET</th>
+                                        <th>3SET</th>
+                                        <th>4SET</th>
+                                        <th>5SET</th>
+                                        <th>TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="${homeWon ? 'winner' : 'loser'}">
+                                        <td class="team-name">${homeTeam.name}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 1)?.home_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 2)?.home_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 3)?.home_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 4)?.home_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 5)?.home_team_score || 0}</td>
+                                        <td class="total-score">${totalHomeScore}</td>
+                                    </tr>
+                                    <tr class="${awayWon ? 'winner' : 'loser'}">
+                                        <td class="team-name">${awayTeam.name}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 1)?.away_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 2)?.away_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 3)?.away_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 4)?.away_team_score || 0}</td>
+                                        <td class="set-score">${sets.find(s => s.set_number === 5)?.away_team_score || 0}</td>
+                                        <td class="total-score">${totalAwayScore}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('matchModal').style.display = 'block';
+        }
+
+
+
+    </script>
+</body>
+</html>

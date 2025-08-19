@@ -11,13 +11,16 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <i class="fas fa-volleyball-ball"></i>
-                <span>배구 연맹 데이터</span>
+                <a href="index.html" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-volleyball-ball"></i>
+                    <span>배구 연맹 데이터</span>
+                </a>
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link active">홈</a>
+                <a href="index.html" class="nav-link active hide-on-mobile">홈</a>
                 <a href="team_ranking.html" class="nav-link">팀 순위</a>
                 <a href="player_record.html" class="nav-link">선수 기록</a>
+                <a href="match_results.html" class="nav-link">경기 결과</a>
                 <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
             </nav>
         </div>
@@ -25,7 +28,7 @@
 
     <div class="container">
         <!-- 히어로 섹션 -->
-        <section class="hero">
+        <section class="hero hide-on-mobile">
             <div class="hero-content">
                 <h1>중고등 배구 데이터 분석</h1>
                 <p>데이터 기반 기록과 순위를 한눈에 확인하고,<br>체계적으로 미래를 준비하세요</p>
@@ -226,6 +229,12 @@
         .container {
             padding-top: 0rem;
         }
+    @media screen and (max-width: 768px) {
+        .container {
+            padding-top: 0.5rem;
+        }
+            
+    }
     </style>
     <script>
         // 관리자 기능 표시/숨김 (실제 환경에서는 서버에서 처리)
@@ -278,6 +287,15 @@
                 modal.style.display = 'none';
             }
         }
+        
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            }
+        });
 
         // 로그인 폼 처리 (데모용)
         document.querySelector('form').addEventListener('submit', function(e) {
