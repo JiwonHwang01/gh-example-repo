@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -292,18 +291,18 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <a href="{% url 'mh_databank:index' %}" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                <a href="index.html" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fas fa-volleyball-ball"></i>
                     <span>배구 연맹 데이터</span>
                 </a>
             </div>
             <nav class="nav">
-                <a href="{% url 'mh_databank:index' %}" class="nav-link hide-on-mobile">홈</a>
-                <a href="{% url 'mh_databank:team_ranking' %}" class="nav-link">팀 순위</a>
-                <a href="{% url 'mh_databank:player_record' %}" class="nav-link">선수 기록</a>
-                <a href="{% url 'mh_databank:match_results' %}" class="nav-link">경기 결과</a>
-                <a href="{% url 'mh_databank:player_certification' %}" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
-                <a href="{% url 'mh_databank:admin_panel' %}" class="nav-link active admin-only-nav">관리</a>
+                <a href="index.html" class="nav-link hide-on-mobile">홈</a>
+                <a href="team_ranking.html" class="nav-link">팀 순위</a>
+                <a href="player_record.html" class="nav-link">선수 기록</a>
+                <a href="match_results.html" class="nav-link">경기 결과</a>
+                <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
+                <a href="#" class="nav-link active admin-only-nav">관리</a>
             </nav>
         </div>
     </header>
@@ -318,22 +317,22 @@
                 <h2>템플릿 다운로드</h2>
                 <p>데이터 입력을 위한 엑셀 템플릿 파일들을 다운로드하세요</p>
                 <div class="template-links">
-                    <a href="{% static 'data_input_templates/01_teams.xlsx' %}" class="btn btn-outline btn-sm" download>
+                    <a href="#" class="btn btn-outline btn-sm" download>
                         <i class="fas fa-download"></i> 팀 정보
                     </a>
-                    <a href="{% static 'data_input_templates/02_players.xlsx' %}" class="btn btn-outline btn-sm" download>
+                    <a href="#" class="btn btn-outline btn-sm" download>
                         <i class="fas fa-download"></i> 선수 정보
                     </a>
-                    <a href="{% static 'data_input_templates/03_tournaments.xlsx' %}" class="btn btn-outline btn-sm" download>
+                    <a href="#" class="btn btn-outline btn-sm" download>
                         <i class="fas fa-download"></i> 대회 정보
                     </a>
-                    <a href="{% static 'data_input_templates/04_matches.xlsx' %}" class="btn btn-outline btn-sm" download>
+                    <a href="#" class="btn btn-outline btn-sm" download>
                         <i class="fas fa-download"></i> 경기 정보
                     </a>
-                    <a href="{% static 'data_input_templates/05_set_scores.xlsx' %}" class="btn btn-outline btn-sm" download>
+                    <a href="#" class="btn btn-outline btn-sm" download>
                         <i class="fas fa-download"></i> 세트 점수
                     </a>
-                    <a href="{% static 'data_input_templates/06_player_match_stats.xlsx' %}" class="btn btn-outline btn-sm" download>
+                    <a href="#" class="btn btn-outline btn-sm" download>
                         <i class="fas fa-download"></i> 선수 경기 통계
                     </a>
                 </div>
@@ -343,10 +342,10 @@
                 <h2>시스템 관리</h2>
                 <p>데이터 업로드 및 시스템 관리 기능</p>
                 <div class="admin-buttons vertical">
-                    <a href="{% url 'mh_databank:excel_upload' %}" class="btn btn-primary">
+                    <a href="excel_upload.html" class="btn btn-primary">
                         <i class="fas fa-upload"></i> 데이터 업로드
                     </a>
-                    <a href="/admin/" class="btn btn-admin" target="_blank">
+                    <a href="#" class="btn btn-admin" target="_blank">
                         <i class="fas fa-cog"></i> Django 관리자
                     </a>
                 </div>
