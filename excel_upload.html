@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel 데이터 업로드 - 중고등 배구 데이터</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        .upload-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group select,
+        .form-group input[type="file"] {
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group select:focus,
+        .form-group input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .upload-btn {
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .upload-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .messages {
+            margin-bottom: 1rem;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .file-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .file-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+        
+        .file-info ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .file-info li {
+            margin-bottom: 0.25rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="{% url 'mh_databank:index' %}" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-volleyball-ball"></i>
+                    <span>배구 연맹 데이터</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'mh_databank:index' %}" class="nav-link hide-on-mobile">홈</a>
+                <a href="{% url 'mh_databank:team_ranking' %}" class="nav-link">팀 순위</a>
+                <a href="{% url 'mh_databank:player_record' %}" class="nav-link">선수 기록</a>
+                <a href="{% url 'mh_databank:match_results' %}" class="nav-link">경기 결과</a>
+                <a href="{% url 'mh_databank:player_certification' %}" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
+                <a href="{% url 'mh_databank:admin_panel' %}" class="nav-link admin-only-nav" style="display:none;">관리자</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="upload-container">
+            <h1><i class="fas fa-upload"></i> Excel 데이터 업로드</h1>
+            
+            <!-- 메시지 표시 -->
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- 업로드 폼 -->
+            <form method="post" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="file_type">파일 타입 선택:</label>
+                    <select name="file_type" id="file_type" required>
+                        <option value="">파일 타입을 선택하세요</option>
+                        <option value="teams">팀 정보 (01_teams.xlsx)</option>
+                        <option value="players">선수 정보 (02_players.xlsx)</option>
+                        <option value="tournaments">대회 정보 (03_tournaments.xlsx)</option>
+                        <option value="matches">경기 정보 (04_matches.xlsx)</option>
+                        <option value="set_scores">세트별 점수 (05_set_scores.xlsx)</option>
+                        <option value="player_stats">선수별 경기 기록 (06_player_match_stats.xlsx)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="excel_file">Excel 파일 선택:</label>
+                    <input type="file" name="excel_file" id="excel_file" accept=".xlsx,.xls" required>
+                </div>
+                
+                <button type="submit" class="upload-btn">
+                    <i class="fas fa-upload"></i> 업로드
+                </button>
+            </form>
+            
+            <!-- 파일 정보 -->
+            <div class="file-info">
+                <h4><i class="fas fa-info-circle"></i> 업로드 가이드</h4>
+                <ul>
+                    <li><strong>파일 형식:</strong> Excel 파일 (.xlsx, .xls)</li>
+                    <li><strong>데이터 순서:</strong> 팀 → 선수 → 대회 → 경기 → 세트점수 → 선수기록</li>
+                    <li><strong>중요:</strong> 외래키 관계를 위해 순서대로 업로드해야 합니다</li>
+                    <li><strong>중복 방지:</strong> 이미 존재하는 데이터는 건너뜁니다</li>
+                </ul>
+            </div>
+            
+            <!-- 템플릿 다운로드 링크 -->
+            <div class="file-info">
+                <h4><i class="fas fa-download"></i> 템플릿 다운로드</h4>
+                <p>데이터 입력을 위한 Excel 템플릿이 <code>data_input_templates</code> 폴더에 생성되어 있습니다.</p>
+                <ul>
+                    <li>01_teams.xlsx - 팀 정보 템플릿</li>
+                    <li>02_players.xlsx - 선수 정보 템플릿</li>
+                    <li>03_tournaments.xlsx - 대회 정보 템플릿</li>
+                    <li>04_matches.xlsx - 경기 정보 템플릿</li>
+                    <li>05_set_scores.xlsx - 세트별 점수 템플릿</li>
+                    <li>06_player_match_stats.xlsx - 선수별 경기 기록 템플릿</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 중고등 배구 데이터. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 파일 선택 시 파일명 표시
+        document.getElementById('excel_file').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                console.log('선택된 파일:', fileName);
+            }
+        });
+        
+        // 파일 타입 선택 시 안내 메시지
+        document.getElementById('file_type').addEventListener('change', function(e) {
+            const fileType = e.target.value;
+            console.log('선택된 파일 타입:', fileType);
+        });
+    </script>
+</body>
+</html>
