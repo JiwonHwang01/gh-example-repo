@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel 데이터 업로드 - 중고등 배구 데이터</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="style.css">
     <style>
         .upload-container {
             max-width: 800px;
@@ -119,18 +118,18 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <a href="{% url 'mh_databank:index' %}" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                <a href="idnex.html" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fas fa-volleyball-ball"></i>
                     <span>배구 연맹 데이터</span>
                 </a>
             </div>
             <nav class="nav">
-                <a href="{% url 'mh_databank:index' %}" class="nav-link hide-on-mobile">홈</a>
-                <a href="{% url 'mh_databank:team_ranking' %}" class="nav-link">팀 순위</a>
-                <a href="{% url 'mh_databank:player_record' %}" class="nav-link">선수 기록</a>
-                <a href="{% url 'mh_databank:match_results' %}" class="nav-link">경기 결과</a>
-                <a href="{% url 'mh_databank:player_certification' %}" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
-                <a href="{% url 'mh_databank:admin_panel' %}" class="nav-link admin-only-nav" style="display:none;">관리자</a>
+                <a href="index.html" class="nav-link hide-on-mobile">홈</a>
+                <a href="team_ranking.html" class="nav-link">팀 순위</a>
+                <a href="player_record.html" class="nav-link">선수 기록</a>
+                <a href="match_results.html" class="nav-link">경기 결과</a>
+                <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
+                <a href="admin_panel.html" class="nav-link admin-only-nav" style="display:none;">관리자</a>
             </nav>
         </div>
     </header>
@@ -228,3 +227,4 @@
     </script>
 </body>
 </html>
+
