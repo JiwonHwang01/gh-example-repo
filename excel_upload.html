@@ -138,17 +138,6 @@
         <div class="upload-container">
             <h1><i class="fas fa-upload"></i> Excel 데이터 업로드</h1>
             
-            <!-- 메시지 표시 -->
-            {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <div class="message {{ message.tags }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            
             <!-- 업로드 폼 -->
             <form method="post" enctype="multipart/form-data" class="upload-form">
                 {% csrf_token %}
@@ -227,4 +216,5 @@
     </script>
 </body>
 </html>
+
 
