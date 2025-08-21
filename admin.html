@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -98,16 +99,94 @@
         /* Admin Section */
         .admin-sections-wrapper {
             display: flex;
+            justify-content: center;
             gap: 2rem;
+            padding: 0rem 10rem;
         }
 
         .admin-section {
-            flex: 1;
             background: white;
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
+            flex: 1;
+        }
+
+        .admin-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .admin-buttons.vertical {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .admin-buttons.vertical .btn {
+            width: 100%;
+        }
+
+        .admin-buttons .btn {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .admin-buttons .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .admin-buttons .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .admin-buttons .btn-outline {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .admin-buttons .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .admin-buttons .btn-admin {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+        }
+
+        .admin-buttons .btn-admin:hover {
+            background: linear-gradient(135deg, #ee5a24 0%, #ff6b6b 100%);
+        }
+
+        .template-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .template-links .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            min-width: auto;
         }
 
         .admin-section h2 {
@@ -117,7 +196,7 @@
             border-bottom: 1px solid #e9ecef;
         }
 
-        .upload-area p, .download-area p {
+        .admin-section p {
             margin-bottom: 1rem;
             color: #666;
         }
@@ -194,6 +273,7 @@
 
             .nav {
                 gap: 1rem;
+                display: none;
             }
             
             .hide-on-mobile {
@@ -202,6 +282,7 @@
 
             .admin-sections-wrapper {
                 flex-direction: column;
+                padding: 0rem;
             }
         }
     </style>
@@ -211,15 +292,18 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <i class="fas fa-volleyball-ball"></i>
-                <span>배구 연맹 데이터</span>
+                <a href="{% url 'mh_databank:index' %}" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-volleyball-ball"></i>
+                    <span>배구 연맹 데이터</span>
+                </a>
             </div>
             <nav class="nav">
-                <a href="index.html" class="nav-link">홈</a>
-                <a href="team_ranking.html" class="nav-link">팀 순위</a>
-                <a href="player_record.html" class="nav-link">선수 기록</a>
-                <a href="player_certification.html" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
-                <a href="admin.html" class="nav-link active admin-only-nav" style="display:none;">관리자</a>
+                <a href="{% url 'mh_databank:index' %}" class="nav-link hide-on-mobile">홈</a>
+                <a href="{% url 'mh_databank:team_ranking' %}" class="nav-link">팀 순위</a>
+                <a href="{% url 'mh_databank:player_record' %}" class="nav-link">선수 기록</a>
+                <a href="{% url 'mh_databank:match_results' %}" class="nav-link">경기 결과</a>
+                <a href="{% url 'mh_databank:player_certification' %}" class="nav-link hide-on-mobile" target="_blank">기록 증명서</a>
+                <a href="{% url 'mh_databank:admin_panel' %}" class="nav-link active admin-only-nav">관리</a>
             </nav>
         </div>
     </header>
@@ -230,24 +314,42 @@
         </div>
 
         <div class="admin-sections-wrapper">
-            <div class="admin-section upload-area">
-                <h2>경기 결과 업로드</h2>
-                <p>엑셀 형식의 경기 결과 파일을 업로드</p>
-                <div class="file-upload-wrapper">
-                    <input type="file" id="file-upload" accept=".xlsx">
-                    <label for="file-upload" class="btn btn-outline"><i class="fas fa-file-upload"></i> 파일 선택</label>
-                    <span id="file-name">선택된 파일 없음</span>
+            <div class="admin-section">
+                <h2>템플릿 다운로드</h2>
+                <p>데이터 입력을 위한 엑셀 템플릿 파일들을 다운로드하세요</p>
+                <div class="template-links">
+                    <a href="{% static 'data_input_templates/01_teams.xlsx' %}" class="btn btn-outline btn-sm" download>
+                        <i class="fas fa-download"></i> 팀 정보
+                    </a>
+                    <a href="{% static 'data_input_templates/02_players.xlsx' %}" class="btn btn-outline btn-sm" download>
+                        <i class="fas fa-download"></i> 선수 정보
+                    </a>
+                    <a href="{% static 'data_input_templates/03_tournaments.xlsx' %}" class="btn btn-outline btn-sm" download>
+                        <i class="fas fa-download"></i> 대회 정보
+                    </a>
+                    <a href="{% static 'data_input_templates/04_matches.xlsx' %}" class="btn btn-outline btn-sm" download>
+                        <i class="fas fa-download"></i> 경기 정보
+                    </a>
+                    <a href="{% static 'data_input_templates/05_set_scores.xlsx' %}" class="btn btn-outline btn-sm" download>
+                        <i class="fas fa-download"></i> 세트 점수
+                    </a>
+                    <a href="{% static 'data_input_templates/06_player_match_stats.xlsx' %}" class="btn btn-outline btn-sm" download>
+                        <i class="fas fa-download"></i> 선수 경기 통계
+                    </a>
                 </div>
-                <br>
-                <button class="btn btn-primary" id="upload-button">업로드</button>
             </div>
 
-            <div class="admin-section download-area">
-                <h2>파일 변환 프로그램</h2>
-                <p>업로드 전 파일 형식 변환용 프로그램</p>
-                <a href="#" class="btn btn-outline" download>
-                    <i class="fas fa-download"></i> 프로그램 다운로드
-                </a>
+            <div class="admin-section">
+                <h2>시스템 관리</h2>
+                <p>데이터 업로드 및 시스템 관리 기능</p>
+                <div class="admin-buttons vertical">
+                    <a href="{% url 'mh_databank:excel_upload' %}" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> 데이터 업로드
+                    </a>
+                    <a href="/admin/" class="btn btn-admin" target="_blank">
+                        <i class="fas fa-cog"></i> Django 관리자
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -255,52 +357,15 @@
     <script>
         // Access Control
         document.addEventListener('DOMContentLoaded', function() {
-            
+            // 관리자 권한 확인 (필요시 활성화)
             // if (localStorage.getItem('isAdmin') !== 'true') {
             //     alert('접근 권한이 없습니다.');
             //     window.location.href = 'index.html';
             // } else {
             //     document.querySelector(".admin-only-nav").style.display = "inline-block";
             // }
-
-            const fileUpload = document.getElementById('file-upload');
-            const fileNameSpan = document.getElementById('file-name');
-            const uploadButton = document.getElementById('upload-button');
-
-            fileUpload.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    fileNameSpan.textContent = this.files[0].name;
-                } else {
-                    fileNameSpan.textContent = '선택된 파일 없음';
-                }
-            });
-
-            uploadButton.addEventListener('click', function() {
-                if (fileUpload.files.length === 0) {
-                    alert('파일을 선택해주세요.');
-                    return;
-                }
-
-                this.textContent = '업로드 중...';
-                this.disabled = true;
-
-                // Simulate backend processing
-                setTimeout(() => {
-                    // 백엔드 파싱 및 DB 저장 로직 (시뮬레이션)
-                    const isSuccess = Math.random() > 0.2; // 80% success rate
-
-                    if (isSuccess) {
-                        alert('성공적으로 업로드되었습니다!');
-                        fileNameSpan.textContent = '선택된 파일 없음';
-                        fileUpload.value = ''; // Reset file input
-                    } else {
-                        alert('오류가 발생했습니다. 파일 형식을 확인해주세요.');
-                    }
-
-                    this.textContent = '업로드';
-                    this.disabled = false;
-                }, 1500);
-            });
+            
+            console.log('관리자 페이지 로드 완료');
         });
     </script>
 </body>
